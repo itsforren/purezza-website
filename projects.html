@@ -161,6 +161,16 @@ ul{list-style:none}
 .detail-gallery-img{width:100%;border-radius:2px;opacity:0;transform:translateY(20px) scale(0.98);transition:opacity .6s var(--ease),transform .6s var(--ease)}
 .detail-gallery-img.visible{opacity:1;transform:translateY(0) scale(1)}
 
+/* SCROLL HINT (mobile only) */
+.detail-scroll-hint{display:none;position:absolute;bottom:20px;left:50%;transform:translateX(-50%);flex-direction:column;align-items:center;gap:6px;z-index:2;pointer-events:none;animation:scrollHintPulse 2s ease-in-out infinite}
+.detail-scroll-hint span{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);opacity:.8}
+.detail-scroll-hint svg{width:20px;height:20px;stroke:var(--accent);stroke-width:1.5;opacity:.8}
+@keyframes scrollHintPulse{0%,100%{opacity:1;transform:translateX(-50%) translateY(0)}50%{opacity:.5;transform:translateX(-50%) translateY(6px)}}
+.detail-scroll-hint.hidden{opacity:0;transition:opacity .3s}
+
+/* GALLERY LABEL (mobile only) */
+.detail-gallery-label{display:none;font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border)}
+
 /* NEXT PROJECT SECTION */
 .next-project{margin-top:60px;padding:60px 0 80px;border-top:1px solid var(--border);cursor:pointer;position:relative;overflow:hidden}
 .next-project-label{font-size:.65rem;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:20px;text-align:center}
@@ -254,11 +264,15 @@ ul{list-style:none}
   .filter-tabs{justify-content:center}
   .filter-count{text-align:center}
   .projects-section{padding:36px 24px 48px}
+  .detail-scroll{transform:none!important;transition:opacity .35s var(--ease)!important}
+  .detail-overlay.open .detail-scroll{opacity:1;transition-delay:.2s!important}
   .detail-hero-img{height:35vh;min-height:200px}
   .detail-body{grid-template-columns:1fr;gap:32px;padding:28px 20px 40px}
   .detail-gallery{gap:16px}
   .detail-gallery-img{opacity:1;transform:none;border-radius:2px}
+  .detail-gallery-label{display:block}
   .detail-close{right:20px;top:12px;z-index:2015;width:40px;height:40px;background:rgba(10,10,10,0.6);border-radius:50%;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .detail-scroll-hint{display:flex}
   .next-project{margin-top:32px;padding:40px 20px 60px}
   .next-project-preview{max-width:100%;aspect-ratio:16/10}
   .cta-section{padding:80px 24px}
@@ -273,6 +287,10 @@ ul{list-style:none}
 }
 @media(max-width:480px){
   .filter-tab{padding:8px 14px;font-size:.65rem}
+  .detail-hero-img{height:28vh;min-height:180px}
+  .detail-body{padding:24px 16px 32px;gap:28px}
+  .detail-meta-title{font-size:1.6rem}
+  .detail-meta-desc{font-size:.85rem}
 }
 
 /* ══════════════════════════════════════════════
@@ -384,7 +402,13 @@ ul{list-style:none}
     <svg viewBox="0 0 24 24" fill="none"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
   </button>
   <div class="detail-scroll" id="detailScroll">
-    <img class="detail-hero-img" id="detailHeroImg" src="" alt="">
+    <div style="position:relative">
+      <img class="detail-hero-img" id="detailHeroImg" src="" alt="">
+      <div class="detail-scroll-hint" id="scrollHint">
+        <span>Scroll</span>
+        <svg viewBox="0 0 24 24" fill="none"><polyline points="6 9 12 15 18 9"/></svg>
+      </div>
+    </div>
     <div class="detail-body">
       <div class="detail-meta">
         <p class="detail-meta-label" id="detailLabel"></p>
@@ -1183,6 +1207,11 @@ function populateDetail(project) {
 
   var galleryEl = document.getElementById('detailGallery');
   galleryEl.textContent = '';
+
+  /* Gallery label for mobile */
+  var galleryLabel = createEl('p', 'detail-gallery-label', 'Gallery \u2014 ' + project.gallery.length + ' Images');
+  galleryEl.appendChild(galleryLabel);
+
   project.gallery.forEach(function(src, i) {
     var img = createImg(src, project.name + ' - Image ' + (i + 1), 'detail-gallery-img', 'lazy');
     img.addEventListener('click', function() { openLightbox(project.gallery, i); });
@@ -1192,29 +1221,35 @@ function populateDetail(project) {
   buildNextProjectSection(project);
 }
 
+var pendingNextProject = null;
+
 function buildNextProjectSection(currentProject) {
   var nextProjectEl = document.getElementById('nextProject');
-  nextProjectEl.textContent = '';
-  var next = getNextProject(currentProject);
-  if (!next || next.id === currentProject.id) { nextProjectEl.style.display = 'none'; return; }
+  /* Replace element to remove old listeners */
+  var freshEl = nextProjectEl.cloneNode(false);
+  nextProjectEl.parentNode.replaceChild(freshEl, nextProjectEl);
 
-  nextProjectEl.style.display = '';
+  var next = getNextProject(currentProject);
+  if (!next || next.id === currentProject.id) { freshEl.style.display = 'none'; return; }
+
+  pendingNextProject = next;
+  freshEl.style.display = '';
 
   var label = createEl('p', 'next-project-label', 'Next Project');
-  nextProjectEl.appendChild(label);
+  freshEl.appendChild(label);
 
   var name = createEl('h3', 'next-project-name', next.name);
-  nextProjectEl.appendChild(name);
+  freshEl.appendChild(name);
 
   var loc = createEl('p', 'next-project-location', next.location + ' \u00b7 ' + next.type);
-  nextProjectEl.appendChild(loc);
+  freshEl.appendChild(loc);
 
   var preview = createEl('div', 'next-project-preview');
   var previewImg = createImg(next.image, next.name, '', 'lazy');
   preview.appendChild(previewImg);
   var previewOverlay = createEl('div', 'next-project-overlay');
   preview.appendChild(previewOverlay);
-  nextProjectEl.appendChild(preview);
+  freshEl.appendChild(preview);
 
   var arrow = createEl('div', 'next-project-arrow');
   var arrowSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
@@ -1224,37 +1259,53 @@ function buildNextProjectSection(currentProject) {
   arrowLine.setAttribute('points', '6 9 12 15 18 9');
   arrowSvg.appendChild(arrowLine);
   arrow.appendChild(arrowSvg);
-  nextProjectEl.appendChild(arrow);
+  freshEl.appendChild(arrow);
 
-  nextProjectEl.addEventListener('click', function() { transitionToProject(next); });
+  freshEl.addEventListener('click', function() {
+    if (pendingNextProject) transitionToProject(pendingNextProject);
+  });
 }
 
-function transitionToProject(nextProject) {
+function transitionToProject(nextProj) {
   var scrollContainer = detailScrollEl;
   var detailBody = scrollContainer.querySelector('.detail-body');
   var heroImg = document.getElementById('detailHeroImg');
-  var nextProjectEl = document.getElementById('nextProject');
+  var npEl = document.getElementById('nextProject');
 
-  gsap.to([heroImg, detailBody, nextProjectEl], {
+  var targets = [heroImg, detailBody];
+  if (npEl) targets.push(npEl);
+
+  gsap.to(targets, {
     opacity: 0, y: -30, duration: 0.35, ease: 'power2.in',
     onComplete: function() {
-      activeProject = nextProject;
-      var newCard = document.querySelector('[data-id="' + nextProject.id + '"]');
+      activeProject = nextProj;
+      var newCard = document.querySelector('[data-id="' + nextProj.id + '"]');
       if (newCard) activeCard = newCard;
 
-      populateDetail(nextProject);
+      populateDetail(nextProj);
       scrollContainer.scrollTop = 0;
-      history.replaceState(null, '', '#' + nextProject.id);
+      history.replaceState(null, '', '#' + nextProj.id);
 
       heroImg = document.getElementById('detailHeroImg');
       detailBody = scrollContainer.querySelector('.detail-body');
-      nextProjectEl = document.getElementById('nextProject');
+      npEl = document.getElementById('nextProject');
 
       gsap.fromTo(heroImg, { opacity: 0, scale: 1.03 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out' });
       gsap.fromTo(detailBody, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, delay: 0.15, ease: 'power2.out' });
-      gsap.fromTo(nextProjectEl, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, delay: 0.3, ease: 'power2.out' });
+      if (npEl) gsap.fromTo(npEl, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, delay: 0.3, ease: 'power2.out' });
 
       setTimeout(observeGalleryImages, 100);
+
+      /* Re-show scroll hint on mobile */
+      var scrollHintEl = document.getElementById('scrollHint');
+      if (window.innerWidth <= 768 && scrollHintEl) {
+        scrollHintEl.classList.remove('hidden');
+        var hideHint = function() {
+          scrollHintEl.classList.add('hidden');
+          scrollContainer.removeEventListener('scroll', hideHint);
+        };
+        scrollContainer.addEventListener('scroll', hideHint, { passive: true });
+      }
     }
   });
 }
@@ -1306,6 +1357,17 @@ function openDetail(project, card) {
   history.pushState(null, '', '#' + project.id);
 
   setTimeout(observeGalleryImages, 100);
+
+  /* Show scroll hint on mobile, hide on first scroll */
+  var scrollHintEl = document.getElementById('scrollHint');
+  if (window.innerWidth <= 768 && scrollHintEl) {
+    scrollHintEl.classList.remove('hidden');
+    var hideHint = function() {
+      scrollHintEl.classList.add('hidden');
+      detailScrollEl.removeEventListener('scroll', hideHint);
+    };
+    detailScrollEl.addEventListener('scroll', hideHint, { passive: true });
+  }
 }
 
 function unlockBodyScroll() {
