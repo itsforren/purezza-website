@@ -1,0 +1,1318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PUREZZA — Projects Portfolio</title>
+  <meta name="description" content="Explore extraordinary spaces transformed by Purezza craftsmanship. Pergolas, flooring, ceilings, decks and more.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <style>
+/* ══════════════════════════════════════════════
+   RESET & CUSTOM PROPERTIES
+══════════════════════════════════════════════ */
+:root {
+  --bg: #0A0A0A;
+  --bg2: #1A1918;
+  --accent: #B8975F;
+  --accent-dim: rgba(184,151,95,0.12);
+  --text: #FFFFFF;
+  --text2: #9B948B;
+  --border: #2A2725;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Outfit', system-ui, sans-serif;
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --ease-flip: cubic-bezier(0.4, 0, 0.2, 1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{font-family:var(--sans);font-weight:300;color:var(--text);background:var(--bg);overflow-x:hidden}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;border:none;background:none;color:inherit;cursor:pointer}
+ul{list-style:none}
+::selection{background:var(--accent);color:var(--bg)}
+
+/* ══════════════════════════════════════════════
+   CUSTOM CURSOR
+══════════════════════════════════════════════ */
+.cursor{position:fixed;top:0;left:0;width:20px;height:20px;border:1.5px solid var(--accent);border-radius:50%;pointer-events:none;z-index:10001;transform:translate(-50%,-50%);transition:width .3s var(--ease),height .3s var(--ease),background .3s,opacity .3s}
+.cursor.active{width:44px;height:44px;background:rgba(184,151,95,0.06)}
+.cursor.hidden{opacity:0}
+@media(pointer:coarse){.cursor{display:none!important}}
+@media(pointer:fine){*{cursor:none!important}}
+
+/* ══════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════ */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:28px 52px;display:flex;align-items:center;justify-content:space-between;transition:all .5s var(--ease)}
+.nav.scrolled{background:rgba(10,10,10,0.88);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);padding:18px 52px;border-bottom:1px solid rgba(42,39,37,0.4)}
+.nav-logo svg{height:20px;width:auto;fill:var(--accent);transition:filter .4s}
+.nav-logo:hover svg{filter:drop-shadow(0 0 12px rgba(184,151,95,0.35))}
+.nav-links{display:flex;align-items:center;gap:44px}
+.nav-link{font-size:.78rem;font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--text2);position:relative;transition:color .3s}
+.nav-link::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--accent);transition:width .35s var(--ease)}
+.nav-link:hover{color:var(--text)}
+.nav-link:hover::after{width:100%}
+.nav-link.active{color:var(--accent)}
+.nav-link.active::after{width:100%}
+.nav-cta{font-size:.72rem;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);padding:13px 30px;position:relative;overflow:hidden;transition:color .4s var(--ease)}
+.nav-cta::before{content:'';position:absolute;inset:0;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .45s var(--ease)}
+.nav-cta:hover{color:var(--bg)}
+.nav-cta:hover::before{transform:scaleX(1)}
+.nav-cta span{position:relative;z-index:1}
+.nav-hamburger{display:none;flex-direction:column;gap:6px;padding:8px;z-index:1001}
+.nav-hamburger span{display:block;width:28px;height:1px;background:var(--text);transition:all .35s var(--ease)}
+.nav-hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.nav-hamburger.open span:nth-child(2){opacity:0}
+.nav-hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+/* Mobile Menu */
+.mobile-menu{position:fixed;inset:0;background:rgba(10,10,10,0.97);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;opacity:0;pointer-events:none;transition:opacity .5s}
+.mobile-menu.open{opacity:1;pointer-events:all}
+.mobile-menu a{font-family:var(--serif);font-size:2.4rem;font-weight:300;color:var(--text);opacity:0;transform:translateY(30px);transition:all .5s var(--ease)}
+.mobile-menu.open a{opacity:1;transform:translateY(0)}
+.mobile-menu.open a:nth-child(1){transition-delay:.1s}
+.mobile-menu.open a:nth-child(2){transition-delay:.18s}
+.mobile-menu.open a:nth-child(3){transition-delay:.26s}
+.mobile-menu.open a:nth-child(4){transition-delay:.34s}
+.mobile-menu.open a:nth-child(5){transition-delay:.42s}
+.mobile-menu.open a:nth-child(6){transition-delay:.5s}
+
+/* ══════════════════════════════════════════════
+   PAGE HERO
+══════════════════════════════════════════════ */
+.page-hero{position:relative;height:65vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.page-hero-bg{position:absolute;inset:0}
+.page-hero-bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.05)}
+.page-hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,0.6) 0%,rgba(10,10,10,0.75) 50%,rgba(10,10,10,0.92) 100%)}
+.page-hero-content{position:relative;z-index:2;text-align:center;max-width:800px;padding:0 24px}
+.page-hero-label{font-family:var(--sans);font-size:.72rem;font-weight:400;letter-spacing:.35em;text-transform:uppercase;color:var(--accent);margin-bottom:28px;opacity:0}
+.page-hero-title{font-family:var(--serif);font-size:clamp(2.8rem,6vw,5.2rem);font-weight:300;line-height:1.1;color:var(--text);margin-bottom:24px}
+.page-hero-title .word{display:inline-block;opacity:0;transform:translateY(30px);margin-right:0.25em}
+.page-hero-sub{font-size:1.05rem;font-weight:200;color:var(--text2);line-height:1.7;max-width:580px;margin:0 auto 40px;opacity:0}
+.page-hero-line{width:60px;height:1px;background:var(--accent);margin:0 auto;transform:scaleX(0);transform-origin:center}
+.page-hero-count{margin-top:40px;opacity:0}
+.page-hero-count span{font-family:var(--serif);font-size:2.4rem;font-weight:300;color:var(--accent)}
+.page-hero-count p{font-size:.72rem;letter-spacing:.25em;text-transform:uppercase;color:var(--text2);margin-top:4px}
+
+/* ══════════════════════════════════════════════
+   FILTER BAR
+══════════════════════════════════════════════ */
+.filter-bar{position:sticky;top:0;z-index:100;padding:20px 52px;display:flex;align-items:center;justify-content:space-between;background:rgba(10,10,10,0.85);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border-bottom:1px solid rgba(42,39,37,0.3);transition:all .4s var(--ease)}
+.filter-tabs{display:flex;gap:8px;flex-wrap:wrap}
+.filter-tab{font-size:.72rem;font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--text2);padding:10px 20px;position:relative;transition:color .3s var(--ease)}
+.filter-tab::after{content:'';position:absolute;bottom:4px;left:20px;right:20px;height:1px;background:var(--accent);transform:scaleX(0);transition:transform .35s var(--ease)}
+.filter-tab:hover{color:var(--text)}
+.filter-tab.active{color:var(--accent)}
+.filter-tab.active::after{transform:scaleX(1)}
+.filter-count{font-size:.65rem;color:var(--text2);letter-spacing:.1em;white-space:nowrap}
+
+/* ══════════════════════════════════════════════
+   PROJECTS GRID (Masonry)
+══════════════════════════════════════════════ */
+.projects-section{padding:60px 52px 80px;min-height:60vh}
+.projects-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;grid-auto-flow:dense}
+.project-card{position:relative;overflow:hidden;background:var(--bg2);opacity:0;transform:translateY(40px);will-change:transform}
+.project-card.visible{opacity:1;transform:translateY(0);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.project-card.hidden-card{display:none}
+.project-card.featured{grid-column:span 2;grid-row:span 1}
+.project-card-inner{position:relative;width:100%;height:100%;aspect-ratio:4/3;overflow:hidden}
+.project-card.featured .project-card-inner{aspect-ratio:16/9}
+.project-card-img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease);transform:scale(1.01);will-change:transform}
+.project-card:hover .project-card-img{transform:scale(1.05)}
+.project-card-overlay{position:absolute;inset:0;background:linear-gradient(0deg,rgba(10,10,10,0.7) 0%,rgba(10,10,10,0.1) 50%,transparent 100%);transition:background .5s var(--ease)}
+.project-card:hover .project-card-overlay{background:linear-gradient(0deg,rgba(10,10,10,0.55) 0%,rgba(10,10,10,0.05) 50%,transparent 100%)}
+.project-card-content{position:absolute;bottom:0;left:0;right:0;padding:32px;z-index:2}
+.project-card-tag{display:inline-block;font-size:.6rem;font-weight:400;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);background:rgba(10,10,10,0.5);padding:5px 12px;margin-bottom:12px;border:1px solid rgba(184,151,95,0.2)}
+.project-card-name{font-family:var(--serif);font-size:1.6rem;font-weight:400;margin-bottom:6px;transition:transform .4s var(--ease)}
+.project-card:hover .project-card-name{transform:translateY(-8px)}
+.project-card-location{font-size:.72rem;font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--text2);margin-bottom:4px}
+.project-card-scope{font-size:.7rem;color:var(--text2);font-weight:300}
+.project-card-view{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);opacity:0;transform:translateY(10px);transition:all .4s var(--ease);margin-top:8px}
+.project-card:hover .project-card-view{opacity:1;transform:translateY(0)}
+.project-card-border{position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--accent);transition:width .5s var(--ease);z-index:3}
+.project-card:hover .project-card-border{width:100%}
+
+/* ══════════════════════════════════════════════
+   PROJECT DETAIL OVERLAY
+══════════════════════════════════════════════ */
+.detail-overlay{position:fixed;inset:0;z-index:2000;pointer-events:none;opacity:0}
+.detail-overlay.open{pointer-events:all;opacity:1}
+.detail-backdrop{position:absolute;inset:0;background:rgba(10,10,10,0);transition:background .6s var(--ease-flip)}
+.detail-overlay.open .detail-backdrop{background:rgba(10,10,10,0.95)}
+.detail-close{position:fixed;top:28px;right:52px;z-index:2010;width:44px;height:44px;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .4s var(--ease);pointer-events:none}
+.detail-overlay.open .detail-close{opacity:1;pointer-events:all;transition-delay:.5s}
+.detail-close svg{width:20px;height:20px;stroke:var(--accent);stroke-width:1.5;transition:stroke .3s}
+.detail-close:hover svg{stroke:var(--text)}
+.detail-scroll{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden;opacity:0;transform:translateY(30px);transition:opacity .5s var(--ease),transform .5s var(--ease);-webkit-overflow-scrolling:touch}
+.detail-overlay.open .detail-scroll{opacity:1;transform:translateY(0);transition-delay:.35s}
+.detail-hero-img{width:100%;height:70vh;object-fit:cover}
+.detail-body{max-width:1200px;margin:0 auto;padding:60px 52px 100px;display:grid;grid-template-columns:2fr 3fr;gap:80px}
+.detail-meta-label{font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:24px}
+.detail-meta-title{font-family:var(--serif);font-size:clamp(2rem,3.5vw,3rem);font-weight:300;line-height:1.2;margin-bottom:20px}
+.detail-meta-info{display:flex;flex-direction:column;gap:16px;margin-bottom:32px}
+.detail-meta-row{display:flex;justify-content:space-between;padding-bottom:12px;border-bottom:1px solid var(--border)}
+.detail-meta-key{font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text2)}
+.detail-meta-val{font-size:.85rem;color:var(--text);font-weight:300;text-align:right}
+.detail-meta-desc{font-size:.92rem;font-weight:300;color:var(--text2);line-height:1.8}
+.detail-gallery{display:flex;flex-direction:column;gap:20px}
+.detail-gallery-img{width:100%;border-radius:2px;opacity:0;transform:translateY(20px) scale(0.98);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.detail-gallery-img.visible{opacity:1;transform:translateY(0) scale(1)}
+
+/* FLIP ghost image */
+.flip-ghost{position:fixed;z-index:2005;pointer-events:none;object-fit:cover;will-change:transform;border-radius:0}
+
+/* ══════════════════════════════════════════════
+   LIGHTBOX
+══════════════════════════════════════════════ */
+.lightbox{position:fixed;inset:0;z-index:3000;background:rgba(10,10,10,0.97);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s var(--ease)}
+.lightbox.open{opacity:1;pointer-events:all}
+.lightbox img{max-width:90vw;max-height:90vh;object-fit:contain}
+.lightbox-close{position:absolute;top:28px;right:52px;width:44px;height:44px;display:flex;align-items:center;justify-content:center}
+.lightbox-close svg{width:20px;height:20px;stroke:var(--accent);stroke-width:1.5;transition:stroke .3s}
+.lightbox-close:hover svg{stroke:var(--text)}
+.lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;display:flex;align-items:center;justify-content:center;transition:opacity .3s}
+.lightbox-nav:hover{opacity:.7}
+.lightbox-nav svg{width:24px;height:24px;stroke:var(--accent);stroke-width:1.5}
+.lightbox-prev{left:24px}
+.lightbox-next{right:24px}
+
+/* ══════════════════════════════════════════════
+   CTA SECTION
+══════════════════════════════════════════════ */
+.cta-section{padding:140px 52px;text-align:center;background:var(--bg2);border-top:1px solid var(--border)}
+.cta-line{width:48px;height:1px;background:var(--accent);margin:0 auto 28px;opacity:0;transform:translateY(20px)}
+.cta-title{font-family:var(--serif);font-size:clamp(2rem,4vw,3.2rem);font-weight:300;line-height:1.2;margin-bottom:16px;opacity:0;transform:translateY(30px)}
+.cta-sub{font-size:.95rem;font-weight:300;color:var(--text2);margin-bottom:48px;line-height:1.7;opacity:0;transform:translateY(20px)}
+.cta-btn{display:inline-block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);padding:16px 56px;position:relative;overflow:hidden;transition:color .4s var(--ease);opacity:0;transform:translateY(20px)}
+.cta-btn::before{content:'';position:absolute;inset:0;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .45s var(--ease)}
+.cta-btn:hover{color:var(--bg)}
+.cta-btn:hover::before{transform:scaleX(1)}
+.cta-btn span{position:relative;z-index:1}
+
+/* ══════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════ */
+.footer{background:var(--bg);border-top:1px solid var(--border);padding:60px 52px 40px}
+.footer-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:60px}
+.footer-logo svg{height:18px;fill:var(--accent)}
+.footer-nav{display:flex;gap:40px}
+.footer-nav a{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text2);transition:color .3s}
+.footer-nav a:hover{color:var(--accent)}
+.footer-social{display:flex;gap:20px}
+.footer-social a{width:36px;height:36px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:border-color .3s}
+.footer-social a:hover{border-color:var(--accent)}
+.footer-social svg{width:14px;height:14px;fill:var(--text2);transition:fill .3s}
+.footer-social a:hover svg{fill:var(--accent)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:28px;border-top:1px solid var(--border)}
+.footer-copy{font-size:.72rem;color:var(--text2);letter-spacing:.06em}
+.footer-tagline{font-size:.68rem;color:rgba(138,130,121,0.5);font-style:italic}
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════ */
+@media(max-width:1024px){
+  .projects-grid{grid-template-columns:repeat(2,1fr)}
+  .project-card.featured{grid-column:span 2}
+  .filter-bar{padding:16px 32px}
+  .projects-section{padding:48px 32px 60px}
+  .detail-body{grid-template-columns:1fr;gap:48px;padding:48px 32px 80px}
+  .cta-section{padding:100px 32px}
+  .nav{padding:24px 32px}
+  .nav.scrolled{padding:16px 32px}
+  .footer{padding:60px 32px 40px}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .nav-cta.desktop{display:none}
+  .nav-hamburger{display:flex}
+  .projects-grid{grid-template-columns:1fr}
+  .project-card.featured{grid-column:span 1}
+  .project-card.featured .project-card-inner{aspect-ratio:4/3}
+  .filter-bar{padding:14px 24px;flex-direction:column;gap:12px}
+  .filter-tabs{justify-content:center}
+  .filter-count{text-align:center}
+  .projects-section{padding:36px 24px 48px}
+  .detail-hero-img{height:50vh}
+  .detail-body{padding:36px 24px 60px}
+  .detail-close{right:24px}
+  .cta-section{padding:80px 24px}
+  .nav{padding:20px 24px}
+  .footer-top{flex-direction:column;gap:32px}
+  .footer-nav{flex-wrap:wrap;gap:20px}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+  .footer{padding:60px 24px 40px}
+  .page-hero{height:55vh}
+  .lightbox-prev{left:12px}
+  .lightbox-next{right:12px}
+}
+@media(max-width:480px){
+  .filter-tab{padding:8px 14px;font-size:.65rem}
+}
+
+/* ══════════════════════════════════════════════
+   REDUCED MOTION
+══════════════════════════════════════════════ */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}
+  .page-hero-bg img{transform:none}
+  .project-card{opacity:1;transform:none}
+  .project-card.visible{transition:none}
+}
+  </style>
+</head>
+<body>
+
+<!-- ═══ CUSTOM CURSOR ═══ -->
+<div class="cursor" id="cursor"></div>
+
+<!-- ═══ NAVIGATION ═══ -->
+<nav class="nav scrolled" id="nav">
+  <a href="index.html" class="nav-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224.89 41.14">
+      <path d="M16.24,23.46H4.1v14.01H.46V2.73h15.78c5.58,0,10.16,4.01,10.16,10.36s-4.38,10.37-10.16,10.37m.06-17.3H4.1v13.86h12.2c3.49,0,6.25-2.87,6.25-6.93s-2.86-6.93-6.25-6.93"/>
+      <path d="M45.94,38.1c-8.03,0-13.85-5.36-13.85-13.54V2.73h3.65V24.55c0,5.99,4.28,10.05,10.21,10.05s10.26-4.07,10.26-10.05V2.73h3.7V24.55c0,8.18-5.99,13.54-13.96,13.54"/>
+      <path d="M90.17,37.47l-8.07-14.74h-10.37v14.74h-3.65V2.73h15.05c5.52,0,10.11,3.7,10.11,10,0,4.64-2.61,8.02-7.25,9.48l8.44,15.26h-4.28Zm-6.98-31.31h-11.46v13.13h11.46c3.49,0,6.2-2.66,6.2-6.57s-2.87-6.56-6.2-6.56"/>
+      <polygon points="100.54 37.47 100.54 2.73 124.97 2.73 124.97 6.16 104.24 6.16 104.24 17.36 121.85 17.36 121.85 20.75 104.24 20.75 104.24 34.03 124.97 34.03 124.97 37.47 100.54 37.47"/>
+      <polygon points="129.92 37.47 129.92 34.03 151.07 6.16 130.76 6.16 130.76 2.73 155.65 2.73 155.65 6.16 134.51 34.03 156.07 34.03 156.07 37.47 129.92 37.47"/>
+      <polygon points="160.66 37.47 160.66 34.03 181.81 6.16 161.49 6.16 161.49 2.73 186.39 2.73 186.39 6.16 165.24 34.03 186.81 34.03 186.81 37.47 160.66 37.47"/>
+      <polygon points="209.47 2.73 204.47 2.73 190.14 37.47 193.79 37.47 198.11 27 199.53 23.56 199.52 23.56 206.91 5.59 215.56 27 219.89 37.47 223.79 37.47 209.47 2.73"/>
+    </svg>
+  </a>
+  <ul class="nav-links">
+    <li><a href="index.html#craft" class="nav-link">Craftsmanship</a></li>
+    <li><a href="projects.html" class="nav-link active">Projects</a></li>
+    <li><a href="index.html#about" class="nav-link">About</a></li>
+    <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+    <li><a href="index.html#contact" class="nav-cta desktop"><span>Request Consultation</span></a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ═══ MOBILE MENU ═══ -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html#craft">Craftsmanship</a>
+  <a href="projects.html">Projects</a>
+  <a href="index.html#about">About</a>
+  <a href="index.html#contact">Contact</a>
+  <a href="index.html#contact" style="color:var(--accent);font-size:1.2rem;font-family:var(--sans);letter-spacing:.2em;text-transform:uppercase;margin-top:20px">Consultation</a>
+</div>
+
+<!-- ═══ PAGE HERO ═══ -->
+<section class="page-hero">
+  <div class="page-hero-bg">
+    <img src="assets/cielos/cumaru/cumaru-0065.jpg" alt="Luxury wood ceiling installation" loading="eager">
+  </div>
+  <div class="page-hero-overlay"></div>
+  <div class="page-hero-content">
+    <p class="page-hero-label">Portfolio</p>
+    <h1 class="page-hero-title" id="heroTitle">
+      <span class="word">Our</span><span class="word">Projects</span>
+    </h1>
+    <p class="page-hero-sub">A curated collection of extraordinary spaces, transformed by Purezza craftsmanship across Colombia.</p>
+    <div class="page-hero-line" id="heroLine"></div>
+    <div class="page-hero-count">
+      <span class="counter" data-target="24">0</span>
+      <p>Projects Showcased</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FILTER BAR ═══ -->
+<div class="filter-bar" id="filterBar">
+  <div class="filter-tabs" id="filterTabs">
+    <button class="filter-tab active" data-filter="all">All</button>
+    <button class="filter-tab" data-filter="residential">Residential</button>
+    <button class="filter-tab" data-filter="commercial">Commercial</button>
+    <button class="filter-tab" data-filter="hospitality">Hospitality</button>
+    <button class="filter-tab" data-filter="outdoor">Outdoor</button>
+  </div>
+  <div class="filter-count" id="filterCount"></div>
+</div>
+
+<!-- ═══ PROJECTS GRID ═══ -->
+<section class="projects-section">
+  <div class="projects-grid" id="projectsGrid"></div>
+</section>
+
+<!-- ═══ PROJECT DETAIL OVERLAY ═══ -->
+<div class="detail-overlay" id="detailOverlay">
+  <div class="detail-backdrop" id="detailBackdrop"></div>
+  <button class="detail-close" id="detailClose">
+    <svg viewBox="0 0 24 24" fill="none"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
+  </button>
+  <div class="detail-scroll" id="detailScroll">
+    <img class="detail-hero-img" id="detailHeroImg" src="" alt="">
+    <div class="detail-body">
+      <div class="detail-meta">
+        <p class="detail-meta-label" id="detailLabel"></p>
+        <h2 class="detail-meta-title" id="detailTitle"></h2>
+        <div class="detail-meta-info" id="detailInfo"></div>
+        <p class="detail-meta-desc" id="detailDesc"></p>
+      </div>
+      <div class="detail-gallery" id="detailGallery"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ LIGHTBOX ═══ -->
+<div class="lightbox" id="lightbox">
+  <button class="lightbox-close" id="lightboxClose">
+    <svg viewBox="0 0 24 24" fill="none"><line x1="4" y1="4" x2="20" y2="20"/><line x1="20" y1="4" x2="4" y2="20"/></svg>
+  </button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev">
+    <svg viewBox="0 0 24 24" fill="none"><polyline points="15 18 9 12 15 6"/></svg>
+  </button>
+  <img id="lightboxImg" src="" alt="">
+  <button class="lightbox-nav lightbox-next" id="lightboxNext">
+    <svg viewBox="0 0 24 24" fill="none"><polyline points="9 6 15 12 9 18"/></svg>
+  </button>
+</div>
+
+<!-- ═══ CTA ═══ -->
+<section class="cta-section" id="ctaSection">
+  <div class="cta-line"></div>
+  <h2 class="cta-title">Ready to Create Something Extraordinary?</h2>
+  <p class="cta-sub">Schedule a consultation to discuss your project with our design team.</p>
+  <a href="index.html#contact" class="cta-btn"><span>Request Consultation</span></a>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="footer-top">
+    <a href="index.html" class="footer-logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224.89 41.14">
+        <path d="M16.24,23.46H4.1v14.01H.46V2.73h15.78c5.58,0,10.16,4.01,10.16,10.36s-4.38,10.37-10.16,10.37m.06-17.3H4.1v13.86h12.2c3.49,0,6.25-2.87,6.25-6.93s-2.86-6.93-6.25-6.93"/>
+        <path d="M45.94,38.1c-8.03,0-13.85-5.36-13.85-13.54V2.73h3.65V24.55c0,5.99,4.28,10.05,10.21,10.05s10.26-4.07,10.26-10.05V2.73h3.7V24.55c0,8.18-5.99,13.54-13.96,13.54"/>
+        <path d="M90.17,37.47l-8.07-14.74h-10.37v14.74h-3.65V2.73h15.05c5.52,0,10.11,3.7,10.11,10,0,4.64-2.61,8.02-7.25,9.48l8.44,15.26h-4.28Zm-6.98-31.31h-11.46v13.13h11.46c3.49,0,6.2-2.66,6.2-6.57s-2.87-6.56-6.2-6.56"/>
+        <polygon points="100.54 37.47 100.54 2.73 124.97 2.73 124.97 6.16 104.24 6.16 104.24 17.36 121.85 17.36 121.85 20.75 104.24 20.75 104.24 34.03 124.97 34.03 124.97 37.47 100.54 37.47"/>
+        <polygon points="129.92 37.47 129.92 34.03 151.07 6.16 130.76 6.16 130.76 2.73 155.65 2.73 155.65 6.16 134.51 34.03 156.07 34.03 156.07 37.47 129.92 37.47"/>
+        <polygon points="160.66 37.47 160.66 34.03 181.81 6.16 161.49 6.16 161.49 2.73 186.39 2.73 186.39 6.16 165.24 34.03 186.81 34.03 186.81 37.47 160.66 37.47"/>
+        <polygon points="209.47 2.73 204.47 2.73 190.14 37.47 193.79 37.47 198.11 27 199.53 23.56 199.52 23.56 206.91 5.59 215.56 27 219.89 37.47 223.79 37.47 209.47 2.73"/>
+      </svg>
+    </a>
+    <div class="footer-nav">
+      <a href="index.html#craft">Craftsmanship</a>
+      <a href="projects.html">Projects</a>
+      <a href="index.html#about">About</a>
+      <a href="index.html#contact">Contact</a>
+    </div>
+    <div class="footer-social">
+      <a href="https://instagram.com/somospurezza" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      </a>
+      <a href="https://wa.me/573054101979" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">&copy; 2026 Purezza. All rights reserved.</p>
+    <p class="footer-tagline">Designed with obsession.</p>
+  </div>
+</footer>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+/* ══════════════════════════════════════════════
+   PROJECT DATA — all static, no user input
+══════════════════════════════════════════════ */
+const PROJECTS = [
+  {
+    id: 'residencia-el-poblado',
+    name: 'Residencia El Poblado',
+    location: 'El Poblado, Medell\u00edn',
+    category: 'residential',
+    year: '2024',
+    scope: '180 m\u00b2',
+    wood: 'Cumaru',
+    type: 'Private Residence',
+    featured: true,
+    description: 'A sprawling hillside residence wrapped in Cumaru pergolas and decking. The outdoor living spaces flow seamlessly from interior to terrace, creating a unified sanctuary above the Medell\u00edn valley.',
+    image: 'assets/pergolas/Purezza_Pergolas_madera_17.webp',
+    gallery: [
+      'assets/pergolas/Purezza_Pergolas_madera_5.webp',
+      'assets/pergolas/Purezza_Pergolas_madera_8.webp',
+      'assets/pergolas/Purezza_Pergolas_madera_10.webp',
+      'assets/pergolas/Purezza_Pergolas_madera_12.webp',
+      'assets/pergolas/Purezza_Pergolas_madera_15.webp',
+      'assets/pergolas/Purezza_Pergolas_madera_20.webp'
+    ]
+  },
+  {
+    id: 'penthouse-aviara',
+    name: 'Penthouse Aviara',
+    location: 'Laureles, Medell\u00edn',
+    category: 'residential',
+    year: '2024',
+    scope: '240 m\u00b2',
+    wood: 'Cumaru',
+    type: 'Penthouse',
+    featured: true,
+    description: 'Floor-to-ceiling Cumaru ceilings define the spatial character of this penthouse. Every panel was custom-fitted to follow the architectural curves, creating a warm cocoon of natural wood above an open-plan living space.',
+    image: 'assets/cielos/cumaru/cumaru-0065.jpg',
+    gallery: [
+      'assets/cielos/cumaru/cumaru-0055.jpg',
+      'assets/cielos/cumaru/cumaru-0058.jpg',
+      'assets/cielos/cumaru/cumaru-0060.jpg',
+      'assets/cielos/cumaru/cumaru-0061.jpg',
+      'assets/cielos/cumaru/cumaru-0064.jpg',
+      'assets/cielos/cumaru/cumaru-0066.jpg'
+    ]
+  },
+  {
+    id: 'hotel-provenza',
+    name: 'Hotel Boutique Provenza',
+    location: 'Provenza, Medell\u00edn',
+    category: 'hospitality',
+    year: '2023',
+    scope: '520 m\u00b2',
+    wood: 'Enchape Natural',
+    type: 'Boutique Hotel',
+    featured: false,
+    description: 'A complete wall treatment transformation for this celebrated boutique hotel. Purezza enchapes line the lobby, corridors, and guest suites, establishing a warm, intimate atmosphere throughout.',
+    image: 'assets/enchapes/enchapes-0025.webp',
+    gallery: [
+      'assets/enchapes/enchapes-0010.webp',
+      'assets/enchapes/enchapes-0015.webp',
+      'assets/enchapes/enchapes-0030.webp',
+      'assets/enchapes/enchapes-0035.webp',
+      'assets/enchapes/enchapes-0040.webp',
+      'assets/enchapes/enchapes-0045.webp'
+    ]
+  },
+  {
+    id: 'casa-dubai',
+    name: 'Casa Dubai',
+    location: 'El Poblado, Medell\u00edn',
+    category: 'residential',
+    year: '2024',
+    scope: '160 m\u00b2',
+    wood: 'SPC Dubai',
+    type: 'Private Residence',
+    featured: false,
+    description: 'This modern residence features the Dubai SPC collection throughout, selected for its exceptional durability and warm tonal range that complements the minimalist architecture.',
+    image: 'assets/spc/dubai/dubai-1.webp',
+    gallery: [
+      'assets/spc/dubai/dubai-2.webp',
+      'assets/spc/dubai/dubai-3.webp',
+      'assets/spc/dubai/dubai-4.webp',
+      'assets/spc/dubai/dubai-5.webp',
+      'assets/spc/dubai/dubai-6.webp'
+    ]
+  },
+  {
+    id: 'terraza-cumaru',
+    name: 'Terraza Cumaru',
+    location: 'Envigado, Medell\u00edn',
+    category: 'outdoor',
+    year: '2023',
+    scope: '95 m\u00b2',
+    wood: 'Cumaru',
+    type: 'Deck & Terrace',
+    featured: false,
+    description: 'A rooftop terrace transformed with Cumaru decking, creating an elevated outdoor living space with panoramic city views. The natural hardwood weathers beautifully under the tropical sun.',
+    image: 'assets/deck-cumaru/deck-cumaru-3.jpg',
+    gallery: [
+      'assets/deck-cumaru/deck-cumaru-0.jpg',
+      'assets/deck-cumaru/deck-cumaru-1.jpg',
+      'assets/deck-cumaru/deck-cumaru-2.jpg',
+      'assets/deck-cumaru/deck-cumaru-4.jpg',
+      'assets/deck-cumaru/deck-cumaru-5.jpg'
+    ]
+  },
+  {
+    id: 'residencia-mumbai',
+    name: 'Residencia Mumbai',
+    location: 'Sabaneta, Medell\u00edn',
+    category: 'residential',
+    year: '2024',
+    scope: '200 m\u00b2',
+    wood: 'SPC Mumbai',
+    type: 'Private Residence',
+    featured: true,
+    description: 'The Mumbai SPC collection brings a sophisticated warmth to this contemporary home. Installed across the main living areas, kitchen, and three bedrooms, the flooring unifies the open-concept design.',
+    image: 'assets/spc/mumbai/mumbai-1.webp',
+    gallery: [
+      'assets/spc/mumbai/mumbai-2.webp',
+      'assets/spc/mumbai/mumbai-3.webp',
+      'assets/spc/mumbai/mumbai-5.webp',
+      'assets/spc/mumbai/mumbai-7.webp',
+      'assets/spc/mumbai/mumbai-9.webp',
+      'assets/spc/mumbai/mumbai-11.webp'
+    ]
+  },
+  {
+    id: 'cielos-sapan',
+    name: 'Cielos de Sapan',
+    location: 'Bogot\u00e1',
+    category: 'commercial',
+    year: '2023',
+    scope: '310 m\u00b2',
+    wood: 'Sapan',
+    type: 'Corporate Office',
+    featured: false,
+    description: 'Sapan wood ceilings installed across the executive floor of a Bogot\u00e1 corporate headquarters. The natural grain patterns create an organic counterpoint to the contemporary glass and steel architecture.',
+    image: 'assets/cielos/sapan/sapan-0000.jpg',
+    gallery: [
+      'assets/cielos/sapan/sapan-0001.jpg',
+      'assets/cielos/sapan/sapan-0002.jpg',
+      'assets/cielos/sapan/sapan-0004.jpg',
+      'assets/cielos/sapan/sapan-0006.jpg',
+      'assets/cielos/sapan/sapan-0008.jpg'
+    ]
+  },
+  {
+    id: 'escalera-monumental',
+    name: 'Escalera Monumental',
+    location: 'El Poblado, Medell\u00edn',
+    category: 'residential',
+    year: '2024',
+    scope: '45 m\u00b2',
+    wood: 'Cumaru',
+    type: 'Private Residence',
+    featured: false,
+    description: 'A sculptural staircase crafted in Cumaru hardwood, connecting three levels of a contemporary home. Each tread was individually shaped and finished to follow the helical geometry.',
+    image: 'assets/escaleras/escaleras-main.webp',
+    gallery: [
+      'assets/escaleras/escaleras-hdr1.webp',
+      'assets/escaleras/escaleras-hdr2.webp',
+      'assets/escaleras/cumaru-0025.jpg',
+      'assets/escaleras/cumaru-0041.jpg'
+    ]
+  },
+  {
+    id: 'pergola-roble',
+    name: 'P\u00e9rgola Roble',
+    location: 'Envigado, Medell\u00edn',
+    category: 'outdoor',
+    year: '2023',
+    scope: '75 m\u00b2',
+    wood: 'Roble',
+    type: 'Outdoor Pergola',
+    featured: false,
+    description: 'A sweeping Roble pergola structure that extends the indoor living space into a lush tropical garden. The oak-toned beams filter dappled light onto the entertaining area below.',
+    image: 'assets/pergolas-product/roble/roble-0000.jpg',
+    gallery: [
+      'assets/pergolas-product/roble/roble-0001.jpg',
+      'assets/pergolas-product/roble/roble-0002.jpg',
+      'assets/pergolas-product/roble/roble-0003.jpg',
+      'assets/pergolas-product/roble/roble-0004.jpg',
+      'assets/pergolas-product/roble/roble-0005.jpg'
+    ]
+  },
+  {
+    id: 'piso-alamo',
+    name: 'Piso \u00c1lamo',
+    location: 'Laureles, Medell\u00edn',
+    category: 'residential',
+    year: '2024',
+    scope: '130 m\u00b2',
+    wood: 'Estructurado \u00c1lamo',
+    type: 'Apartment',
+    featured: false,
+    description: 'The \u00c1lamo structured flooring brings an organic, contemporary feel to this mid-century apartment renovation. The wide planks emphasize the generous proportions of the open living areas.',
+    image: 'assets/estructurado/alamo/alamo-1.webp',
+    gallery: [
+      'assets/estructurado/alamo/alamo-2.webp',
+      'assets/estructurado/alamo/alamo-3.webp',
+      'assets/estructurado/alamo/alamo-4.webp',
+      'assets/estructurado/alamo/alamo-5.webp',
+      'assets/estructurado/alamo/alamo-6.webp'
+    ]
+  },
+  {
+    id: 'club-malawi',
+    name: 'Club Malawi',
+    location: 'El Poblado, Medell\u00edn',
+    category: 'hospitality',
+    year: '2023',
+    scope: '280 m\u00b2',
+    wood: 'SPC Malawi',
+    type: 'Private Members Club',
+    featured: false,
+    description: 'The Malawi SPC collection was chosen for this exclusive members club for its rich, dark tones and exceptional resistance to high traffic. The flooring sets the mood for intimate evenings.',
+    image: 'assets/spc/malawi/malawi-1.webp',
+    gallery: [
+      'assets/spc/malawi/malawi-2.webp',
+      'assets/spc/malawi/malawi-3.webp',
+      'assets/spc/malawi/malawi-5.webp',
+      'assets/spc/malawi/malawi-7.webp',
+      'assets/spc/malawi/malawi-9.webp'
+    ]
+  },
+  {
+    id: 'cielos-roble',
+    name: 'Cielos de Roble',
+    location: 'Bogot\u00e1',
+    category: 'commercial',
+    year: '2024',
+    scope: '190 m\u00b2',
+    wood: 'Roble',
+    type: 'Restaurant',
+    featured: false,
+    description: 'Roble wood ceilings create a warm, inviting canopy over this award-winning restaurant. The natural oak tones complement the earthy palette of the interior design.',
+    image: 'assets/cielos/roble/roble-0003.jpg',
+    gallery: [
+      'assets/cielos/roble/roble-0001.jpg',
+      'assets/cielos/roble/roble-0005.jpg',
+      'assets/cielos/roble/roble-0007.jpg',
+      'assets/cielos/roble/roble-0009.jpg',
+      'assets/cielos/roble/roble-0011.jpg'
+    ]
+  },
+  {
+    id: 'laminado-toscano',
+    name: 'Residencia Toscano',
+    location: 'Envigado, Medell\u00edn',
+    category: 'residential',
+    year: '2023',
+    scope: '150 m\u00b2',
+    wood: 'Laminado Toscano',
+    type: 'Private Residence',
+    featured: false,
+    description: 'The Toscano laminate collection delivers Tuscan-inspired warmth throughout this family home. Rich ochre tones and natural grain patterns bring European elegance to every room.',
+    image: 'assets/laminados/toscano/toscano-1.webp',
+    gallery: [
+      'assets/laminados/toscano/toscano-2.webp',
+      'assets/laminados/toscano/toscano-3.webp',
+      'assets/laminados/toscano/toscano-5.webp'
+    ]
+  },
+  {
+    id: 'deck-cielo-fusion',
+    name: 'Deck & Cielo Fusi\u00f3n',
+    location: 'Rionegro, Antioquia',
+    category: 'outdoor',
+    year: '2024',
+    scope: '120 m\u00b2',
+    wood: 'Cumaru & Sapan',
+    type: 'Country House',
+    featured: false,
+    description: 'This country retreat combines Cumaru decking below with Sapan ceiling panels above, creating an immersive wood-clad outdoor living room surrounded by lush Antioquia countryside.',
+    image: 'assets/deck-cielo/decks-cielos-0001.webp',
+    gallery: [
+      'assets/deck-cielo/decks-cielos-0003.webp',
+      'assets/deck-cielo/decks-cielos-0005.webp',
+      'assets/deck-cielo/decks-cielos-0007.webp',
+      'assets/deck-cielo/decks-cielos-0009.webp',
+      'assets/deck-cielo/decks-cielos-0011.webp'
+    ]
+  },
+  {
+    id: 'spa-osaka',
+    name: 'Spa Osaka',
+    location: 'El Poblado, Medell\u00edn',
+    category: 'hospitality',
+    year: '2024',
+    scope: '170 m\u00b2',
+    wood: 'SPC Osaka',
+    type: 'Day Spa',
+    featured: false,
+    description: 'The Osaka SPC collection brings a serene, Japanese-inspired tranquility to this luxury day spa. Water-resistant and warm underfoot, it creates the ideal surface for wellness spaces.',
+    image: 'assets/spc/osaka/osaka-1.webp',
+    gallery: [
+      'assets/spc/osaka/osaka-2.webp',
+      'assets/spc/osaka/osaka-3.webp',
+      'assets/spc/osaka/osaka-4.webp',
+      'assets/spc/osaka/osaka-5.webp'
+    ]
+  },
+  {
+    id: 'showroom-enchapes',
+    name: 'Showroom Purezza',
+    location: 'Provenza, Medell\u00edn',
+    category: 'commercial',
+    year: '2024',
+    scope: '350 m\u00b2',
+    wood: 'Enchape Multi',
+    type: 'Showroom',
+    featured: true,
+    description: 'Our own showroom in the heart of Provenza showcases the full range of Purezza enchapes, from raw textures to refined finishes. Every wall tells a different story of wood craftsmanship.',
+    image: 'assets/enchapes/enchapes-header.webp',
+    gallery: [
+      'assets/enchapes/enchapes-0001.webp',
+      'assets/enchapes/enchapes-0005.webp',
+      'assets/enchapes/enchapes-0012.webp',
+      'assets/enchapes/enchapes-0020.webp',
+      'assets/enchapes/enchapes-0050.webp',
+      'assets/enchapes/enchapes-0060.webp'
+    ]
+  },
+  {
+    id: 'pergola-sapan',
+    name: 'P\u00e9rgola Sapan',
+    location: 'La Estrella, Medell\u00edn',
+    category: 'outdoor',
+    year: '2023',
+    scope: '60 m\u00b2',
+    wood: 'Sapan',
+    type: 'Residential Pergola',
+    featured: false,
+    description: 'A contemporary Sapan pergola that frames mountain views while providing shelter from the tropical sun. The warm honey tones of Sapan complement the verdant landscape.',
+    image: 'assets/pergolas-product/sapan/sapan-0000.jpg',
+    gallery: [
+      'assets/pergolas-product/sapan/sapan-0001.jpg',
+      'assets/pergolas-product/sapan/sapan-0003.jpg',
+      'assets/pergolas-product/sapan/sapan-0004.jpg',
+      'assets/pergolas-product/sapan/sapan-0005.jpg'
+    ]
+  },
+  {
+    id: 'piso-baqueira',
+    name: 'Residencia Baqueira',
+    location: 'Sabaneta, Medell\u00edn',
+    category: 'residential',
+    year: '2024',
+    scope: '110 m\u00b2',
+    wood: 'Laminado Baqueira',
+    type: 'Apartment',
+    featured: false,
+    description: 'The Baqueira laminate collection brings Alpine-inspired sophistication to this modern apartment. Light tones and a subtle brushed texture create an airy, spacious feel.',
+    image: 'assets/laminados/baqueira/baqueira-main.webp',
+    gallery: [
+      'assets/laminados/baqueira/baqueira-1.webp',
+      'assets/laminados/baqueira/baqueira-2.webp',
+      'assets/laminados/baqueira/baqueira-4.webp',
+      'assets/laminados/baqueira/baqueira-5.webp'
+    ]
+  },
+  {
+    id: 'piso-pekin',
+    name: 'Oficina Pek\u00edn',
+    location: 'Bogot\u00e1',
+    category: 'commercial',
+    year: '2023',
+    scope: '220 m\u00b2',
+    wood: 'SPC Pek\u00edn',
+    type: 'Corporate Office',
+    featured: false,
+    description: 'The Pek\u00edn SPC collection was selected for this technology company\'s headquarters. Its cool-toned grain pattern and commercial-grade durability handle the demands of a high-traffic workspace.',
+    image: 'assets/spc/pekin/pekin-1.webp',
+    gallery: [
+      'assets/spc/pekin/pekin-2.webp',
+      'assets/spc/pekin/pekin-3.webp',
+      'assets/spc/pekin/pekin-4.webp',
+      'assets/spc/pekin/pekin-5.webp',
+      'assets/spc/pekin/pekin-6.webp'
+    ]
+  },
+  {
+    id: 'cielos-cumaru-bogota',
+    name: 'Cielos Cumaru',
+    location: 'Usaqu\u00e9n, Bogot\u00e1',
+    category: 'residential',
+    year: '2024',
+    scope: '85 m\u00b2',
+    wood: 'Cumaru',
+    type: 'Penthouse',
+    featured: false,
+    description: 'Cumaru ceiling panels transform the top floor of this Usaqu\u00e9n penthouse into a warm retreat. The rich, dark tones of Cumaru create dramatic contrast against white walls and floor-to-ceiling windows.',
+    image: 'assets/cielos/cumaru/cumaru-0031.jpg',
+    gallery: [
+      'assets/cielos/cumaru/cumaru-0032.jpg',
+      'assets/cielos/cumaru/cumaru-0034.jpg',
+      'assets/cielos/cumaru/cumaru-0035.jpg',
+      'assets/cielos/cumaru/cumaru-0036.jpg',
+      'assets/cielos/cumaru/cumaru-0037.jpg'
+    ]
+  },
+  {
+    id: 'pergola-cumaru',
+    name: 'P\u00e9rgola Cumaru',
+    location: 'Rionegro, Antioquia',
+    category: 'outdoor',
+    year: '2024',
+    scope: '90 m\u00b2',
+    wood: 'Cumaru',
+    type: 'Country Estate',
+    featured: false,
+    description: 'A grand Cumaru pergola structure spanning the entire rear terrace of this country estate. The robust tropical hardwood stands resilient against the elements while aging to a distinguished silver patina.',
+    image: 'assets/pergolas/Purezza_Pergolas_madera_22.webp',
+    gallery: [
+      'assets/pergolas/Purezza_Pergolas_madera_23.webp',
+      'assets/pergolas/Purezza_Pergolas_madera_24.webp',
+      'assets/pergolas/Purezza_Pergolas_madera_25.webp',
+      'assets/pergolas/Purezza_Pergolas_madera_26.webp'
+    ]
+  },
+  {
+    id: 'lobby-enchapes',
+    name: 'Lobby Enchapes',
+    location: 'El Poblado, Medell\u00edn',
+    category: 'commercial',
+    year: '2023',
+    scope: '140 m\u00b2',
+    wood: 'Enchape Premium',
+    type: 'Residential Tower Lobby',
+    featured: false,
+    description: 'Premium enchapes line the double-height lobby of this luxury residential tower. The textured wood panels create a striking first impression, transitioning from raw to refined across the space.',
+    image: 'assets/enchapes/enchapes-0055.webp',
+    gallery: [
+      'assets/enchapes/enchapes-0056.webp',
+      'assets/enchapes/enchapes-0058.webp',
+      'assets/enchapes/enchapes-0062.webp',
+      'assets/enchapes/enchapes-0065.webp',
+      'assets/enchapes/enchapes-0068.webp'
+    ]
+  },
+  {
+    id: 'piso-cioccolato',
+    name: 'Residencia Cioccolato',
+    location: 'Laureles, Medell\u00edn',
+    category: 'residential',
+    year: '2024',
+    scope: '105 m\u00b2',
+    wood: 'Estructurado Cioccolato',
+    type: 'Apartment',
+    featured: false,
+    description: 'The Cioccolato structured flooring brings deep chocolate tones to this contemporary apartment. Its rich, warm palette creates an enveloping sense of comfort throughout the living spaces.',
+    image: 'assets/estructurado/cioccolato/cioccolato-01.webp',
+    gallery: [
+      'assets/estructurado/cioccolato/cioccolato-02.webp'
+    ]
+  },
+  {
+    id: 'restaurante-tokio',
+    name: 'Restaurante Tokio',
+    location: 'Provenza, Medell\u00edn',
+    category: 'hospitality',
+    year: '2024',
+    scope: '195 m\u00b2',
+    wood: 'SPC Tokio',
+    type: 'Restaurant',
+    featured: false,
+    description: 'The Tokio SPC collection brings understated elegance to this Japanese-fusion restaurant. Its muted tones and fine grain pattern establish the serene ambiance the chef envisioned.',
+    image: 'assets/spc/tokio/tokio-1.webp',
+    gallery: [
+      'assets/spc/tokio/tokio-2.webp',
+      'assets/spc/tokio/tokio-3.webp'
+    ]
+  }
+];
+
+/* ══════════════════════════════════════════════
+   INITIALIZATION
+══════════════════════════════════════════════ */
+gsap.registerPlugin(ScrollTrigger);
+
+const lenis = new Lenis({ duration: 1.2, easing: function(t) { return Math.min(1, 1.001 - Math.pow(2, -10 * t)); }, smoothWheel: true });
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(function(time) { lenis.raf(time * 1000); });
+gsap.ticker.lagSmoothing(0);
+
+/* ══════════════════════════════════════════════
+   CUSTOM CURSOR
+══════════════════════════════════════════════ */
+var cursorEl = document.getElementById('cursor');
+var mouseX = -100, mouseY = -100, cursorX = -100, cursorY = -100;
+
+if (window.matchMedia('(pointer:fine)').matches) {
+  document.addEventListener('mousemove', function(e) { mouseX = e.clientX; mouseY = e.clientY; cursorEl.classList.remove('hidden'); });
+  document.addEventListener('mouseleave', function() { cursorEl.classList.add('hidden'); });
+  (function moveCursor() {
+    cursorX += (mouseX - cursorX) * 0.15;
+    cursorY += (mouseY - cursorY) * 0.15;
+    cursorEl.style.left = cursorX + 'px';
+    cursorEl.style.top = cursorY + 'px';
+    requestAnimationFrame(moveCursor);
+  })();
+}
+
+function updateCursorTargets() {
+  document.querySelectorAll('a,button,[data-hover],.project-card').forEach(function(el) {
+    el.addEventListener('mouseenter', function() { cursorEl.classList.add('active'); });
+    el.addEventListener('mouseleave', function() { cursorEl.classList.remove('active'); });
+  });
+}
+
+/* ══════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════ */
+var navEl = document.getElementById('nav');
+window.addEventListener('scroll', function() { navEl.classList.toggle('scrolled', window.scrollY > 20); });
+
+var hamburgerBtn = document.getElementById('hamburger');
+var mobileMenuEl = document.getElementById('mobileMenu');
+hamburgerBtn.addEventListener('click', function() {
+  hamburgerBtn.classList.toggle('open');
+  mobileMenuEl.classList.toggle('open');
+  if (mobileMenuEl.classList.contains('open')) lenis.stop(); else lenis.start();
+});
+mobileMenuEl.querySelectorAll('a').forEach(function(a) {
+  a.addEventListener('click', function() {
+    hamburgerBtn.classList.remove('open');
+    mobileMenuEl.classList.remove('open');
+    lenis.start();
+  });
+});
+
+/* ══════════════════════════════════════════════
+   HERO ANIMATIONS
+══════════════════════════════════════════════ */
+var heroTl = gsap.timeline({ delay: 0.3 });
+heroTl
+  .to('.page-hero-label', { opacity: 1, duration: 0.6, ease: 'power2.out' })
+  .to('.page-hero-title .word', { opacity: 1, y: 0, duration: 0.6, stagger: 0.12, ease: 'power3.out' }, '-=0.3')
+  .to('.page-hero-sub', { opacity: 1, duration: 0.7, ease: 'power2.out' }, '-=0.2')
+  .to('#heroLine', { scaleX: 1, duration: 0.8, ease: 'power2.out' }, '-=0.4')
+  .to('.page-hero-count', { opacity: 1, duration: 0.6, ease: 'power2.out' }, '-=0.3');
+
+var heroCounter = document.querySelector('.page-hero-count .counter');
+if (heroCounter) {
+  var counterTarget = parseInt(heroCounter.dataset.target, 10);
+  gsap.to({ val: 0 }, {
+    val: counterTarget, duration: 2, delay: 1.2, ease: 'power2.out',
+    onUpdate: function() { heroCounter.textContent = Math.round(this.targets()[0].val); }
+  });
+}
+
+/* ══════════════════════════════════════════════
+   SAFE DOM HELPERS
+══════════════════════════════════════════════ */
+function createEl(tag, className, textContent) {
+  var el = document.createElement(tag);
+  if (className) el.className = className;
+  if (textContent) el.textContent = textContent;
+  return el;
+}
+
+function createImg(src, alt, className, loading) {
+  var img = document.createElement('img');
+  img.src = src;
+  img.alt = alt;
+  if (className) img.className = className;
+  if (loading) img.loading = loading;
+  return img;
+}
+
+/* ══════════════════════════════════════════════
+   BUILD GRID — uses safe DOM methods only
+══════════════════════════════════════════════ */
+var gridEl = document.getElementById('projectsGrid');
+var currentFilter = 'all';
+
+function buildGrid(filter) {
+  gridEl.textContent = '';
+  var filtered = filter === 'all' ? PROJECTS : PROJECTS.filter(function(p) { return p.category === filter; });
+
+  filtered.sort(function(a, b) { return (b.featured ? 1 : 0) - (a.featured ? 1 : 0); });
+
+  filtered.forEach(function(project, i) {
+    var card = createEl('div', 'project-card' + (project.featured ? ' featured' : ''));
+    card.dataset.category = project.category;
+    card.dataset.id = project.id;
+    card.style.transitionDelay = (i * 0.1) + 's';
+
+    var inner = createEl('div', 'project-card-inner');
+
+    var img = createImg(project.image, project.name, 'project-card-img', i < 6 ? 'eager' : 'lazy');
+    inner.appendChild(img);
+
+    var overlay = createEl('div', 'project-card-overlay');
+    inner.appendChild(overlay);
+
+    var content = createEl('div', 'project-card-content');
+
+    var tag = createEl('span', 'project-card-tag', project.wood);
+    content.appendChild(tag);
+
+    var name = createEl('h3', 'project-card-name', project.name);
+    content.appendChild(name);
+
+    var location = createEl('p', 'project-card-location', project.location);
+    content.appendChild(location);
+
+    var scope = createEl('p', 'project-card-scope', project.type + ' \u00b7 ' + project.scope);
+    content.appendChild(scope);
+
+    var viewLink = createEl('p', 'project-card-view', 'View Project \u2192');
+    content.appendChild(viewLink);
+
+    inner.appendChild(content);
+
+    var border = createEl('div', 'project-card-border');
+    inner.appendChild(border);
+
+    card.appendChild(inner);
+    card.addEventListener('click', function() { openDetail(project, card); });
+    gridEl.appendChild(card);
+  });
+
+  var countEl = document.getElementById('filterCount');
+  countEl.textContent = 'Showing ' + filtered.length + ' project' + (filtered.length !== 1 ? 's' : '');
+
+  updateCursorTargets();
+  observeCards();
+}
+
+/* ══════════════════════════════════════════════
+   INTERSECTION OBSERVER FOR CARD REVEALS
+══════════════════════════════════════════════ */
+var cardObserver;
+function observeCards() {
+  if (cardObserver) cardObserver.disconnect();
+
+  cardObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        cardObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+  document.querySelectorAll('.project-card').forEach(function(card) { cardObserver.observe(card); });
+}
+
+/* ══════════════════════════════════════════════
+   FILTER TABS
+══════════════════════════════════════════════ */
+var filterTabBtns = document.querySelectorAll('.filter-tab');
+filterTabBtns.forEach(function(tab) {
+  tab.addEventListener('click', function() {
+    if (tab.dataset.filter === currentFilter) return;
+
+    filterTabBtns.forEach(function(t) { t.classList.remove('active'); });
+    tab.classList.add('active');
+    currentFilter = tab.dataset.filter;
+
+    gsap.to(gridEl, {
+      opacity: 0, y: 20, duration: 0.3, ease: 'power2.in',
+      onComplete: function() {
+        buildGrid(currentFilter);
+        gsap.fromTo(gridEl, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power2.out' });
+      }
+    });
+  });
+});
+
+/* ══════════════════════════════════════════════
+   PROJECT DETAIL OVERLAY (FLIP ANIMATION)
+══════════════════════════════════════════════ */
+var overlayEl = document.getElementById('detailOverlay');
+var detailScrollEl = document.getElementById('detailScroll');
+var detailCloseBtn = document.getElementById('detailClose');
+var detailBackdropEl = document.getElementById('detailBackdrop');
+var activeProject = null;
+var activeCard = null;
+var flipGhost = null;
+
+function openDetail(project, card) {
+  activeProject = project;
+  activeCard = card;
+
+  var cardImg = card.querySelector('.project-card-img');
+  var rect = cardImg.getBoundingClientRect();
+
+  flipGhost = createImg(project.image, '', 'flip-ghost');
+  flipGhost.style.left = rect.left + 'px';
+  flipGhost.style.top = rect.top + 'px';
+  flipGhost.style.width = rect.width + 'px';
+  flipGhost.style.height = rect.height + 'px';
+  document.body.appendChild(flipGhost);
+
+  var targetW = window.innerWidth;
+  var targetH = window.innerHeight * 0.7;
+
+  gsap.to(flipGhost, {
+    left: 0, top: 0, width: targetW, height: targetH,
+    duration: 0.65, ease: 'power3.inOut',
+    onComplete: function() {
+      if (flipGhost) { flipGhost.remove(); flipGhost = null; }
+    }
+  });
+
+  document.getElementById('detailHeroImg').src = project.image;
+  document.getElementById('detailHeroImg').alt = project.name;
+  document.getElementById('detailTitle').textContent = project.name;
+  document.getElementById('detailLabel').textContent = project.type;
+  document.getElementById('detailDesc').textContent = project.description;
+
+  var infoEl = document.getElementById('detailInfo');
+  infoEl.textContent = '';
+  var infoRows = [
+    ['Location', project.location],
+    ['Year', project.year],
+    ['Scope', project.scope],
+    ['Wood Collection', project.wood],
+    ['Type', project.type]
+  ];
+  infoRows.forEach(function(row) {
+    var rowEl = createEl('div', 'detail-meta-row');
+    rowEl.appendChild(createEl('span', 'detail-meta-key', row[0]));
+    rowEl.appendChild(createEl('span', 'detail-meta-val', row[1]));
+    infoEl.appendChild(rowEl);
+  });
+
+  var galleryEl = document.getElementById('detailGallery');
+  galleryEl.textContent = '';
+  project.gallery.forEach(function(src, i) {
+    var img = createImg(src, project.name + ' - Image ' + (i + 1), 'detail-gallery-img', 'lazy');
+    img.addEventListener('click', function() { openLightbox(project.gallery, i); });
+    galleryEl.appendChild(img);
+  });
+
+  overlayEl.classList.add('open');
+  detailScrollEl.scrollTop = 0;
+  lenis.stop();
+  document.body.style.overflow = 'hidden';
+
+  history.pushState(null, '', '#' + project.id);
+
+  setTimeout(observeGalleryImages, 100);
+}
+
+function closeDetail() {
+  if (!activeCard) { overlayEl.classList.remove('open'); return; }
+
+  var cardImg = activeCard.querySelector('.project-card-img');
+  var rect = cardImg.getBoundingClientRect();
+  var heroImg = document.getElementById('detailHeroImg');
+  var heroRect = heroImg.getBoundingClientRect();
+
+  flipGhost = createImg(activeProject.image, '', 'flip-ghost');
+  flipGhost.style.left = heroRect.left + 'px';
+  flipGhost.style.top = heroRect.top + 'px';
+  flipGhost.style.width = heroRect.width + 'px';
+  flipGhost.style.height = heroRect.height + 'px';
+  document.body.appendChild(flipGhost);
+
+  overlayEl.classList.remove('open');
+
+  gsap.to(flipGhost, {
+    left: rect.left, top: rect.top, width: rect.width, height: rect.height,
+    duration: 0.55, ease: 'power3.inOut',
+    onComplete: function() {
+      if (flipGhost) { flipGhost.remove(); flipGhost = null; }
+      activeProject = null;
+      activeCard = null;
+    }
+  });
+
+  lenis.start();
+  document.body.style.overflow = '';
+  history.pushState(null, '', window.location.pathname);
+}
+
+detailCloseBtn.addEventListener('click', closeDetail);
+detailBackdropEl.addEventListener('click', function(e) {
+  if (e.target === detailBackdropEl) closeDetail();
+});
+
+window.addEventListener('popstate', function() {
+  if (overlayEl.classList.contains('open')) closeDetail();
+});
+
+function checkHash() {
+  var hash = window.location.hash.slice(1);
+  if (hash) {
+    var project = PROJECTS.find(function(p) { return p.id === hash; });
+    if (project) {
+      setTimeout(function() {
+        var card = document.querySelector('[data-id="' + hash + '"]');
+        if (card) openDetail(project, card);
+      }, 800);
+    }
+  }
+}
+
+/* ══════════════════════════════════════════════
+   GALLERY IMAGE OBSERVER
+══════════════════════════════════════════════ */
+var galleryObserver;
+function observeGalleryImages() {
+  if (galleryObserver) galleryObserver.disconnect();
+
+  galleryObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        galleryObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, root: detailScrollEl });
+
+  document.querySelectorAll('.detail-gallery-img').forEach(function(img) { galleryObserver.observe(img); });
+}
+
+/* ══════════════════════════════════════════════
+   LIGHTBOX
+══════════════════════════════════════════════ */
+var lightboxEl = document.getElementById('lightbox');
+var lightboxImgEl = document.getElementById('lightboxImg');
+var lightboxImages = [];
+var lightboxIndex = 0;
+
+function openLightbox(images, index) {
+  lightboxImages = images;
+  lightboxIndex = index;
+  lightboxImgEl.src = images[index];
+  lightboxEl.classList.add('open');
+}
+
+function closeLightbox() {
+  lightboxEl.classList.remove('open');
+}
+
+document.getElementById('lightboxClose').addEventListener('click', closeLightbox);
+lightboxEl.addEventListener('click', function(e) { if (e.target === lightboxEl) closeLightbox(); });
+
+document.getElementById('lightboxPrev').addEventListener('click', function(e) {
+  e.stopPropagation();
+  lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
+  lightboxImgEl.src = lightboxImages[lightboxIndex];
+});
+
+document.getElementById('lightboxNext').addEventListener('click', function(e) {
+  e.stopPropagation();
+  lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
+  lightboxImgEl.src = lightboxImages[lightboxIndex];
+});
+
+document.addEventListener('keydown', function(e) {
+  if (lightboxEl.classList.contains('open')) {
+    if (e.key === 'Escape') closeLightbox();
+    if (e.key === 'ArrowLeft') {
+      lightboxIndex = (lightboxIndex - 1 + lightboxImages.length) % lightboxImages.length;
+      lightboxImgEl.src = lightboxImages[lightboxIndex];
+    }
+    if (e.key === 'ArrowRight') {
+      lightboxIndex = (lightboxIndex + 1) % lightboxImages.length;
+      lightboxImgEl.src = lightboxImages[lightboxIndex];
+    }
+  } else if (overlayEl.classList.contains('open')) {
+    if (e.key === 'Escape') closeDetail();
+  }
+});
+
+/* ══════════════════════════════════════════════
+   CTA SCROLL ANIMATIONS
+══════════════════════════════════════════════ */
+ScrollTrigger.create({
+  trigger: '#ctaSection',
+  start: 'top 85%',
+  once: true,
+  onEnter: function() {
+    gsap.to('.cta-line', { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' });
+    gsap.to('.cta-title', { opacity: 1, y: 0, duration: 0.8, delay: 0.1, ease: 'power3.out' });
+    gsap.to('.cta-sub', { opacity: 1, y: 0, duration: 0.7, delay: 0.2, ease: 'power3.out' });
+    gsap.to('.cta-btn', { opacity: 1, y: 0, duration: 0.7, delay: 0.3, ease: 'power3.out' });
+  }
+});
+
+/* ══════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════ */
+buildGrid('all');
+checkHash();
+</script>
+</body>
+</html>

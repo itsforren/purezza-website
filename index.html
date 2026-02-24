@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PUREZZA — Luxury Wood Flooring</title>
+  <meta name="description" content="Handcrafted wood floors for the world's most extraordinary spaces.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Outfit:wght@200;300;400;500&display=swap" rel="stylesheet">
+  <style>
+/* ══════════════════════════════════════════════
+   RESET & CUSTOM PROPERTIES
+══════════════════════════════════════════════ */
+:root {
+  --bg: #0A0A0A;
+  --bg2: #1A1918;
+  --accent: #B8975F;
+  --accent-dim: rgba(184,151,95,0.12);
+  --text: #FFFFFF;
+  --text2: #9B948B;
+  --border: #2A2725;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --sans: 'Outfit', system-ui, sans-serif;
+  --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+body{font-family:var(--sans);font-weight:300;color:var(--text);background:var(--bg);overflow:hidden}
+img{display:block;max-width:100%;height:auto}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;border:none;background:none;color:inherit}
+ul{list-style:none}
+::selection{background:var(--accent);color:var(--bg)}
+
+/* ══════════════════════════════════════════════
+   CUSTOM CURSOR
+══════════════════════════════════════════════ */
+.cursor{position:fixed;top:0;left:0;width:20px;height:20px;border:1.5px solid var(--accent);border-radius:50%;pointer-events:none;z-index:10001;transform:translate(-50%,-50%);transition:width .3s var(--ease),height .3s var(--ease),background .3s,opacity .3s}
+.cursor.active{width:44px;height:44px;background:rgba(184,151,95,0.06)}
+.cursor.hidden{opacity:0}
+@media(pointer:coarse){.cursor{display:none!important}}
+@media(pointer:fine){*{cursor:none!important}}
+
+/* ══════════════════════════════════════════════
+   PAGE LOADER
+══════════════════════════════════════════════ */
+.loader{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center}
+.loader-logo{width:240px;opacity:0}
+.loader-logo svg{width:100%;fill:var(--accent)}
+.loader-curtain{position:fixed;inset:0;background:var(--bg);z-index:9998;transform-origin:bottom}
+
+/* ══════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════ */
+.nav{position:fixed;top:0;left:0;right:0;z-index:1000;padding:28px 52px;display:flex;align-items:center;justify-content:space-between;transition:all .5s var(--ease)}
+.nav.scrolled{background:rgba(10,10,10,0.88);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);padding:18px 52px;border-bottom:1px solid rgba(42,39,37,0.4)}
+.nav-logo{opacity:0}
+.nav-logo svg{height:20px;width:auto;fill:var(--accent);transition:filter .4s}
+.nav-logo:hover svg{filter:drop-shadow(0 0 12px rgba(184,151,95,0.35))}
+.nav-links{display:flex;align-items:center;gap:44px}
+.nav-link{font-size:.78rem;font-weight:300;letter-spacing:.14em;text-transform:uppercase;color:var(--text2);position:relative;transition:color .3s}
+.nav-link::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--accent);transition:width .35s var(--ease)}
+.nav-link:hover{color:var(--text)}
+.nav-link:hover::after{width:100%}
+.nav-cta{font-size:.72rem;font-weight:400;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);padding:13px 30px;position:relative;overflow:hidden;transition:color .4s var(--ease)}
+.nav-cta::before{content:'';position:absolute;inset:0;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .45s var(--ease)}
+.nav-cta:hover{color:var(--bg)}
+.nav-cta:hover::before{transform:scaleX(1)}
+.nav-cta span{position:relative;z-index:1}
+.nav-hamburger{display:none;flex-direction:column;gap:6px;padding:8px;z-index:1001}
+.nav-hamburger span{display:block;width:28px;height:1px;background:var(--text);transition:all .35s var(--ease)}
+.nav-hamburger.open span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.nav-hamburger.open span:nth-child(2){opacity:0}
+.nav-hamburger.open span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+/* Mobile Menu */
+.mobile-menu{position:fixed;inset:0;background:rgba(10,10,10,0.97);z-index:999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:36px;opacity:0;pointer-events:none;transition:opacity .5s}
+.mobile-menu.open{opacity:1;pointer-events:all}
+.mobile-menu a{font-family:var(--serif);font-size:2.4rem;font-weight:300;color:var(--text);opacity:0;transform:translateY(30px);transition:all .5s var(--ease)}
+.mobile-menu.open a{opacity:1;transform:translateY(0)}
+.mobile-menu.open a:nth-child(1){transition-delay:.1s}
+.mobile-menu.open a:nth-child(2){transition-delay:.18s}
+.mobile-menu.open a:nth-child(3){transition-delay:.26s}
+.mobile-menu.open a:nth-child(4){transition-delay:.34s}
+.mobile-menu.open a:nth-child(5){transition-delay:.42s}
+.mobile-menu.open a:nth-child(6){transition-delay:.5s}
+
+/* ══════════════════════════════════════════════
+   HERO
+══════════════════════════════════════════════ */
+.hero{position:relative;height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hero-bg{position:absolute;inset:0}
+.hero-bg img{width:100%;height:100%;object-fit:cover;transform:scale(1.08);animation:kenBurns 20s ease-in-out infinite alternate}
+@keyframes kenBurns{0%{transform:scale(1.08) translate(0,0)}100%{transform:scale(1.15) translate(-1%,-1%)}}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,0.55) 0%,rgba(10,10,10,0.7) 50%,rgba(10,10,10,0.9) 100%)}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:800px;padding:0 24px}
+.hero-label{font-family:var(--sans);font-size:.72rem;font-weight:400;letter-spacing:.35em;text-transform:uppercase;color:var(--accent);margin-bottom:28px;opacity:0}
+.hero-title{font-family:var(--serif);font-size:clamp(2.8rem,6vw,5.2rem);font-weight:300;line-height:1.1;color:var(--text);margin-bottom:24px}
+.hero-title .word{display:inline-block;opacity:0;transform:translateY(30px);margin-right:0.25em}
+.hero-sub{font-size:1.05rem;font-weight:200;color:var(--text2);line-height:1.7;max-width:520px;margin:0 auto 40px;opacity:0}
+.hero-line{width:1px;height:0;background:var(--accent);margin:0 auto}
+.hero-scroll{position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:12px;opacity:0}
+.hero-scroll span{font-size:.65rem;letter-spacing:.25em;text-transform:uppercase;color:var(--text2)}
+.hero-scroll-arrow{width:16px;height:16px;border-right:1px solid var(--accent);border-bottom:1px solid var(--accent);transform:rotate(45deg);animation:scrollBounce 2s ease-in-out infinite}
+@keyframes scrollBounce{0%,100%{transform:rotate(45deg) translate(0,0);opacity:1}50%{transform:rotate(45deg) translate(4px,4px);opacity:.4}}
+
+/* ══════════════════════════════════════════════
+   SECTION UTILITIES
+══════════════════════════════════════════════ */
+.section-pad{padding:140px 52px}
+.section-label{font-family:var(--sans);font-size:.68rem;font-weight:400;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:20px}
+.section-line{width:48px;height:1px;background:var(--accent);margin-bottom:20px}
+.section-title{font-family:var(--serif);font-size:clamp(2rem,4vw,3.6rem);font-weight:300;line-height:1.15}
+.reveal{opacity:0;transform:translateY(40px)}
+
+/* ══════════════════════════════════════════════
+   BRAND STATEMENT (Pinned Scroll)
+══════════════════════════════════════════════ */
+.brand{position:relative}
+.brand-pin{height:100vh;width:100%;position:relative;overflow:hidden}
+.brand-slide{position:absolute;inset:0;opacity:0}
+.brand-slide.first{opacity:1}
+.brand-slide-bg{position:absolute;inset:0}
+.brand-slide-bg img{width:100%;height:100%;object-fit:cover}
+.brand-slide-overlay{position:absolute;inset:0;background:rgba(10,10,10,0.72)}
+.brand-slide-content{position:relative;z-index:2;height:100%;display:flex;align-items:center;justify-content:center;padding:0 52px}
+.brand-slide-text{font-family:var(--serif);font-size:clamp(2rem,4.5vw,4rem);font-weight:300;line-height:1.25;text-align:center;max-width:800px;color:var(--text)}
+.brand-progress{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--border);z-index:5}
+.brand-progress-bar{height:100%;width:0;background:var(--accent);transition:none}
+
+/* ══════════════════════════════════════════════
+   COLLECTIONS
+══════════════════════════════════════════════ */
+.collections{background:var(--bg)}
+.collections-header{text-align:center;margin-bottom:80px}
+.collections-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:60px}
+.collection-card{position:relative;aspect-ratio:3/4;overflow:hidden;background:var(--bg2)}
+.collection-card-img{width:100%;height:100%;object-fit:cover;transition:transform .8s var(--ease);transform:scale(1.01)}
+.collection-card:hover .collection-card-img{transform:scale(1.07)}
+.collection-card-content{position:absolute;bottom:0;left:0;right:0;padding:32px;background:linear-gradient(0deg,rgba(10,10,10,0.85) 0%,transparent 100%);transition:padding .4s var(--ease)}
+.collection-card:hover .collection-card-content{padding-bottom:40px}
+.collection-card-name{font-family:var(--serif);font-size:1.6rem;font-weight:400;margin-bottom:6px;transition:transform .4s var(--ease)}
+.collection-card:hover .collection-card-name{transform:translateY(-8px)}
+.collection-card-desc{font-size:.82rem;color:var(--text2);font-weight:300;margin-bottom:8px}
+.collection-card-link{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);opacity:0;transform:translateY(10px);transition:all .4s var(--ease)}
+.collection-card:hover .collection-card-link{opacity:1;transform:translateY(0)}
+.collection-card-border{position:absolute;bottom:0;left:0;width:0;height:2px;background:var(--accent);transition:width .5s var(--ease)}
+.collection-card:hover .collection-card-border{width:100%}
+.collections-more{text-align:center}
+.collections-more a{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text2);transition:color .3s}
+.collections-more a:hover{color:var(--accent)}
+.collections-more a .arrow{display:inline-block;transition:transform .3s}
+.collections-more a:hover .arrow{transform:translateX(6px)}
+
+/* ══════════════════════════════════════════════
+   THE CRAFT (Horizontal Scroll)
+══════════════════════════════════════════════ */
+.craft{overflow:hidden;background:var(--bg2)}
+.craft-header{text-align:center;padding:140px 52px 60px}
+.craft-track-wrapper{overflow:hidden}
+.craft-track{display:flex;width:400%;will-change:transform}
+.craft-panel{width:100vw;height:80vh;display:flex;align-items:center;padding:0 8vw;gap:6vw;flex-shrink:0}
+.craft-panel-number{font-family:var(--serif);font-size:clamp(6rem,12vw,10rem);font-weight:300;color:transparent;-webkit-text-stroke:1px var(--accent);line-height:1;flex-shrink:0}
+.craft-panel-body{max-width:420px}
+.craft-panel-title{font-family:var(--serif);font-size:clamp(1.8rem,3vw,2.6rem);font-weight:300;margin-bottom:16px}
+.craft-panel-desc{font-size:.92rem;font-weight:300;color:var(--text2);line-height:1.8;margin-bottom:28px}
+.craft-panel-img{flex:1;max-width:45%;height:60vh;overflow:hidden;border-radius:2px}
+.craft-panel-img img{width:100%;height:100%;object-fit:cover}
+
+/* ══════════════════════════════════════════════
+   FEATURED PROJECT
+══════════════════════════════════════════════ */
+.project{background:var(--bg);overflow:hidden}
+.project-hero{position:relative;height:90vh;overflow:hidden;margin:0 52px}
+.project-hero-img{width:100%;height:100%;object-fit:cover;transform:scale(0.88);filter:brightness(0.7);border-radius:2px}
+.project-hero-overlay{position:absolute;inset:0;background:linear-gradient(0deg,rgba(10,10,10,0.8) 0%,transparent 50%);display:flex;flex-direction:column;justify-content:flex-end;padding:60px}
+.project-hero-label{font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);margin-bottom:12px}
+.project-hero-name{font-family:var(--serif);font-size:clamp(2.2rem,4vw,3.4rem);font-weight:300;margin-bottom:10px}
+.project-hero-specs{font-size:.85rem;color:var(--text2);font-weight:300;margin-bottom:28px}
+.project-cta{display:inline-block;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);padding:14px 36px;position:relative;overflow:hidden;transition:color .4s}
+.project-cta::before{content:'';position:absolute;inset:0;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .45s var(--ease)}
+.project-cta:hover{color:var(--bg)}
+.project-cta:hover::before{transform:scaleX(1)}
+.project-cta span{position:relative;z-index:1}
+.project-thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding:60px 52px}
+.project-thumb{aspect-ratio:4/3;overflow:hidden;border-radius:2px;position:relative}
+.project-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .7s var(--ease)}
+.project-thumb:hover img{transform:scale(1.06)}
+.project-more{text-align:center;padding:0 52px 140px}
+.project-more a{font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text2);transition:color .3s}
+.project-more a:hover{color:var(--accent)}
+
+/* ══════════════════════════════════════════════
+   WHY PUREZZA (Stats)
+══════════════════════════════════════════════ */
+.stats{position:relative;background:var(--bg2);overflow:hidden}
+.stats-bg{position:absolute;inset:0;opacity:.04}
+.stats-bg img{width:100%;height:100%;object-fit:cover}
+.stats-content{position:relative;z-index:2}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:40px;margin-bottom:100px}
+.stat{text-align:center}
+.stat-number{font-family:var(--serif);font-size:clamp(3rem,5vw,4.5rem);font-weight:300;color:var(--accent);line-height:1;margin-bottom:12px}
+.stat-label{font-size:.78rem;font-weight:300;letter-spacing:.12em;text-transform:uppercase;color:var(--text2)}
+.stats-testimonial{max-width:800px;margin:0 auto;text-align:center}
+.stats-quote{font-family:var(--serif);font-size:clamp(1.4rem,2.5vw,2rem);font-weight:300;font-style:italic;line-height:1.6;color:var(--text);margin-bottom:28px}
+.stats-author{font-size:.78rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text2)}
+
+/* ══════════════════════════════════════════════
+   MATERIAL CLOSE-UP (Spotlight)
+══════════════════════════════════════════════ */
+.material{background:var(--bg)}
+.material-inner{display:grid;grid-template-columns:1.2fr 1fr;gap:80px;align-items:center}
+.material-img-wrap{position:relative;aspect-ratio:4/3;overflow:hidden;border-radius:2px}
+.material-img-wrap img{width:100%;height:100%;object-fit:cover}
+.material-spotlight{position:absolute;inset:0;background:radial-gradient(circle 200px at 50% 50%,transparent 0%,rgba(10,10,10,0.65) 100%);pointer-events:none;transition:none}
+.material-text .section-label{margin-bottom:24px}
+.material-statement{font-family:var(--serif);font-size:clamp(1.6rem,3vw,2.6rem);font-weight:300;line-height:1.4;margin-bottom:20px}
+.material-body{font-size:.9rem;font-weight:300;color:var(--text2);line-height:1.8}
+
+/* ══════════════════════════════════════════════
+   TEXT REVEAL (Karaoke)
+══════════════════════════════════════════════ */
+.text-reveal{padding:180px 52px;display:flex;justify-content:center}
+.text-reveal-content{max-width:760px;margin:0 auto;text-align:center}
+.text-reveal-line{display:block;font-family:var(--serif);font-size:clamp(1.3rem,2.4vw,2rem);font-weight:300;line-height:1.7;color:var(--text2);transition:color .4s var(--ease);margin-bottom:0.1em;text-align:center}
+.text-reveal-line.active{color:var(--text)}
+
+/* ══════════════════════════════════════════════
+   CONTACT
+══════════════════════════════════════════════ */
+.contact{background:var(--bg2)}
+.contact-inner{max-width:680px;margin:0 auto;text-align:center}
+.contact-title{font-family:var(--serif);font-size:clamp(2.2rem,4vw,3.4rem);font-weight:300;margin-bottom:16px}
+.contact-sub{font-size:.95rem;font-weight:300;color:var(--text2);margin-bottom:60px;line-height:1.7}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:24px;text-align:left}
+.form-group{display:flex;flex-direction:column}
+.form-group.full{grid-column:1/-1}
+.form-label{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text2);margin-bottom:10px}
+.form-input,.form-select,.form-textarea{background:transparent;border:none;border-bottom:1px solid var(--border);padding:14px 0;font-family:var(--sans);font-size:.92rem;font-weight:300;color:var(--text);outline:none;transition:border-color .3s}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:var(--accent)}
+.form-input::placeholder,.form-textarea::placeholder{color:rgba(138,130,121,0.5)}
+.form-select{-webkit-appearance:none;appearance:none}
+.form-select option{background:var(--bg2);color:var(--text)}
+.form-textarea{resize:vertical;min-height:100px}
+.form-submit{grid-column:1/-1;display:flex;justify-content:center;margin-top:20px}
+.form-btn{font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);border:1px solid var(--accent);padding:16px 56px;position:relative;overflow:hidden;transition:color .4s var(--ease)}
+.form-btn::before{content:'';position:absolute;inset:0;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .45s var(--ease)}
+.form-btn:hover{color:var(--bg)}
+.form-btn:hover::before{transform:scaleX(1)}
+.form-btn span{position:relative;z-index:1}
+
+/* ══════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════ */
+.footer{background:var(--bg);border-top:1px solid var(--border);padding:60px 52px 40px}
+.footer-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:60px}
+.footer-logo svg{height:18px;fill:var(--accent)}
+.footer-nav{display:flex;gap:40px}
+.footer-nav a{font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text2);transition:color .3s}
+.footer-nav a:hover{color:var(--accent)}
+.footer-social{display:flex;gap:20px}
+.footer-social a{width:36px;height:36px;border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;transition:border-color .3s}
+.footer-social a:hover{border-color:var(--accent)}
+.footer-social svg{width:14px;height:14px;fill:var(--text2);transition:fill .3s}
+.footer-social a:hover svg{fill:var(--accent)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:28px;border-top:1px solid var(--border)}
+.footer-copy{font-size:.72rem;color:var(--text2);letter-spacing:.06em}
+.footer-tagline{font-size:.68rem;color:rgba(138,130,121,0.5);font-style:italic}
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE
+══════════════════════════════════════════════ */
+@media(max-width:1024px){
+  .collections-grid{grid-template-columns:repeat(2,1fr)}
+  .stats-grid{grid-template-columns:repeat(2,1fr);gap:48px 24px}
+  .material-inner{grid-template-columns:1fr;gap:48px}
+  .craft-panel{padding:0 6vw;gap:4vw}
+  .craft-panel-img{max-width:40%}
+  .section-pad{padding:100px 32px}
+  .nav{padding:24px 32px}
+  .nav.scrolled{padding:16px 32px}
+  .project-hero{margin:0 32px}
+  .project-thumbs{padding:40px 32px}
+  .project-more{padding:0 32px 100px}
+}
+@media(max-width:768px){
+  .nav-links{display:none}
+  .nav-cta.desktop{display:none}
+  .nav-hamburger{display:flex}
+  .collections-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .craft-panel{flex-direction:column;height:auto;min-height:80vh;padding:8vh 6vw;gap:32px}
+  .craft-panel-img{max-width:100%;height:40vh;order:-1}
+  .craft-panel-number{font-size:5rem}
+  .form{grid-template-columns:1fr}
+  .footer-top{flex-direction:column;gap:32px}
+  .footer-nav{flex-wrap:wrap;gap:20px}
+  .footer-bottom{flex-direction:column;gap:12px;text-align:center}
+  .hero-title{font-size:clamp(2.2rem,8vw,3.2rem)}
+  .section-pad{padding:80px 24px}
+  .nav{padding:20px 24px}
+  .project-hero{margin:0 24px}
+  .project-thumbs{grid-template-columns:1fr;padding:32px 24px}
+  .project-more{padding:0 24px 80px}
+  .text-reveal{padding:100px 24px}
+  .craft-header{padding:100px 24px 40px}
+}
+@media(max-width:480px){
+  .stats-grid{grid-template-columns:1fr}
+}
+
+/* ══════════════════════════════════════════════
+   REDUCED MOTION
+══════════════════════════════════════════════ */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:0.01ms!important;transition-duration:0.01ms!important}
+  .hero-bg img{animation:none;transform:scale(1.02)}
+}
+  </style>
+</head>
+<body>
+
+<!-- ═══ CUSTOM CURSOR ═══ -->
+<div class="cursor" id="cursor"></div>
+
+<!-- ═══ PAGE LOADER ═══ -->
+<div class="loader" id="loader">
+  <div class="loader-logo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224.89 41.14">
+      <path d="M16.24,23.46H4.1v14.01H.46V2.73h15.78c5.58,0,10.16,4.01,10.16,10.36s-4.38,10.37-10.16,10.37m.06-17.3H4.1v13.86h12.2c3.49,0,6.25-2.87,6.25-6.93s-2.86-6.93-6.25-6.93"/>
+      <path d="M45.94,38.1c-8.03,0-13.85-5.36-13.85-13.54V2.73h3.65V24.55c0,5.99,4.28,10.05,10.21,10.05s10.26-4.07,10.26-10.05V2.73h3.7V24.55c0,8.18-5.99,13.54-13.96,13.54"/>
+      <path d="M90.17,37.47l-8.07-14.74h-10.37v14.74h-3.65V2.73h15.05c5.52,0,10.11,3.7,10.11,10,0,4.64-2.61,8.02-7.25,9.48l8.44,15.26h-4.28Zm-6.98-31.31h-11.46v13.13h11.46c3.49,0,6.2-2.66,6.2-6.57s-2.87-6.56-6.2-6.56"/>
+      <polygon points="100.54 37.47 100.54 2.73 124.97 2.73 124.97 6.16 104.24 6.16 104.24 17.36 121.85 17.36 121.85 20.75 104.24 20.75 104.24 34.03 124.97 34.03 124.97 37.47 100.54 37.47"/>
+      <polygon points="129.92 37.47 129.92 34.03 151.07 6.16 130.76 6.16 130.76 2.73 155.65 2.73 155.65 6.16 134.51 34.03 156.07 34.03 156.07 37.47 129.92 37.47"/>
+      <polygon points="160.66 37.47 160.66 34.03 181.81 6.16 161.49 6.16 161.49 2.73 186.39 2.73 186.39 6.16 165.24 34.03 186.81 34.03 186.81 37.47 160.66 37.47"/>
+      <polygon points="209.47 2.73 204.47 2.73 190.14 37.47 193.79 37.47 198.11 27 199.53 23.56 199.52 23.56 206.91 5.59 215.56 27 219.89 37.47 223.79 37.47 209.47 2.73"/>
+    </svg>
+  </div>
+</div>
+<div class="loader-curtain" id="loaderCurtain"></div>
+
+<!-- ═══ NAVIGATION ═══ -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo" id="navLogo">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224.89 41.14">
+      <path d="M16.24,23.46H4.1v14.01H.46V2.73h15.78c5.58,0,10.16,4.01,10.16,10.36s-4.38,10.37-10.16,10.37m.06-17.3H4.1v13.86h12.2c3.49,0,6.25-2.87,6.25-6.93s-2.86-6.93-6.25-6.93"/>
+      <path d="M45.94,38.1c-8.03,0-13.85-5.36-13.85-13.54V2.73h3.65V24.55c0,5.99,4.28,10.05,10.21,10.05s10.26-4.07,10.26-10.05V2.73h3.7V24.55c0,8.18-5.99,13.54-13.96,13.54"/>
+      <path d="M90.17,37.47l-8.07-14.74h-10.37v14.74h-3.65V2.73h15.05c5.52,0,10.11,3.7,10.11,10,0,4.64-2.61,8.02-7.25,9.48l8.44,15.26h-4.28Zm-6.98-31.31h-11.46v13.13h11.46c3.49,0,6.2-2.66,6.2-6.57s-2.87-6.56-6.2-6.56"/>
+      <polygon points="100.54 37.47 100.54 2.73 124.97 2.73 124.97 6.16 104.24 6.16 104.24 17.36 121.85 17.36 121.85 20.75 104.24 20.75 104.24 34.03 124.97 34.03 124.97 37.47 100.54 37.47"/>
+      <polygon points="129.92 37.47 129.92 34.03 151.07 6.16 130.76 6.16 130.76 2.73 155.65 2.73 155.65 6.16 134.51 34.03 156.07 34.03 156.07 37.47 129.92 37.47"/>
+      <polygon points="160.66 37.47 160.66 34.03 181.81 6.16 161.49 6.16 161.49 2.73 186.39 2.73 186.39 6.16 165.24 34.03 186.81 34.03 186.81 37.47 160.66 37.47"/>
+      <polygon points="209.47 2.73 204.47 2.73 190.14 37.47 193.79 37.47 198.11 27 199.53 23.56 199.52 23.56 206.91 5.59 215.56 27 219.89 37.47 223.79 37.47 209.47 2.73"/>
+    </svg>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#craft" class="nav-link">Craftsmanship</a></li>
+    <li><a href="projects.html" class="nav-link">Projects</a></li>
+    <li><a href="#about" class="nav-link">About</a></li>
+    <li><a href="#contact" class="nav-link">Contact</a></li>
+    <li><a href="#contact" class="nav-cta"><span>Request Consultation</span></a></li>
+  </ul>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ═══ MOBILE MENU ═══ -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#craft">Craftsmanship</a>
+  <a href="projects.html">Projects</a>
+  <a href="#about">About</a>
+  <a href="#contact">Contact</a>
+  <a href="#contact" style="color:var(--accent);font-size:1.2rem;font-family:var(--sans);letter-spacing:.2em;text-transform:uppercase;margin-top:20px">Consultation</a>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero" id="hero">
+  <div class="hero-bg">
+    <img src="assets/pergolas/Purezza_Pergolas_madera_17.webp" alt="Luxury wood installation by Purezza" loading="eager">
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-label">Luxury Wood Flooring</p>
+    <h1 class="hero-title" id="heroTitle">
+      <span class="word">Where </span><span class="word">Nature </span><span class="word">Meets </span><span class="word">Perfection</span>
+    </h1>
+    <p class="hero-sub">Handcrafted wood floors for the world's most extraordinary spaces.</p>
+    <div class="hero-line" id="heroLine"></div>
+  </div>
+  <div class="hero-scroll">
+    <span>Discover</span>
+    <div class="hero-scroll-arrow"></div>
+  </div>
+</section>
+
+<!-- ═══ BRAND STATEMENT (Pinned Scroll) ═══ -->
+<section class="brand" id="brand">
+  <div class="brand-pin" id="brandPin">
+    <div class="brand-slide first" data-slide="0">
+      <div class="brand-slide-bg"><img src="assets/pergolas/Purezza_Pergolas_madera_5.webp" alt="Sustainably sourced wood"></div>
+      <div class="brand-slide-overlay"></div>
+      <div class="brand-slide-content"><p class="brand-slide-text">Every plank tells a story of origin</p></div>
+    </div>
+    <div class="brand-slide" data-slide="1">
+      <div class="brand-slide-bg"><img src="assets/pisos/Purezza_pisos_en_madera3.jpg" alt="Master craftsmanship"></div>
+      <div class="brand-slide-overlay"></div>
+      <div class="brand-slide-content"><p class="brand-slide-text">Shaped by master hands, not machines</p></div>
+    </div>
+    <div class="brand-slide" data-slide="2">
+      <div class="brand-slide-bg"><img src="assets/cielos/cumaru/cumaru-0065.jpg" alt="Luxury interior"></div>
+      <div class="brand-slide-overlay"></div>
+      <div class="brand-slide-content"><p class="brand-slide-text">Installed with obsessive precision</p></div>
+    </div>
+    <div class="brand-progress"><div class="brand-progress-bar" id="brandProgress"></div></div>
+  </div>
+</section>
+
+<!-- ═══ COLLECTIONS ═══ -->
+<section class="collections section-pad" id="collections">
+  <div class="collections-header">
+    <div class="section-line reveal" style="margin:0 auto 20px"></div>
+    <h2 class="section-title reveal">Our Collections</h2>
+  </div>
+  <div class="collections-grid">
+    <a href="projects.html#piso-alamo" class="collection-card reveal">
+      <img class="collection-card-img" src="assets/estructurado/alamo/alamo-1.webp" alt="Rovere Antico collection">
+      <div class="collection-card-content">
+        <h3 class="collection-card-name">Rovere Antico</h3>
+        <p class="collection-card-desc">Aged European oak with deep grain character</p>
+        <span class="collection-card-link">View Projects &rarr;</span>
+      </div>
+      <div class="collection-card-border"></div>
+    </a>
+    <a href="projects.html#residencia-mumbai" class="collection-card reveal">
+      <img class="collection-card-img" src="assets/spc/mumbai/mumbai-1.webp" alt="Noce Imperiale collection">
+      <div class="collection-card-content">
+        <h3 class="collection-card-name">Noce Imperiale</h3>
+        <p class="collection-card-desc">Rich walnut tones with regal warmth</p>
+        <span class="collection-card-link">View Projects &rarr;</span>
+      </div>
+      <div class="collection-card-border"></div>
+    </a>
+    <a href="projects.html#laminado-toscano" class="collection-card reveal">
+      <img class="collection-card-img" src="assets/laminados/toscano/toscano-1.webp" alt="Frassino Bianco collection">
+      <div class="collection-card-content">
+        <h3 class="collection-card-name">Frassino Bianco</h3>
+        <p class="collection-card-desc">Luminous ash with contemporary elegance</p>
+        <span class="collection-card-link">View Projects &rarr;</span>
+      </div>
+      <div class="collection-card-border"></div>
+    </a>
+    <a href="projects.html#hotel-provenza" class="collection-card reveal">
+      <img class="collection-card-img" src="assets/enchapes/enchapes-0025.webp" alt="Ebano Reale collection">
+      <div class="collection-card-content">
+        <h3 class="collection-card-name">Ebano Reale</h3>
+        <p class="collection-card-desc">Obsidian depths of rare tropical ebony</p>
+        <span class="collection-card-link">View Projects &rarr;</span>
+      </div>
+      <div class="collection-card-border"></div>
+    </a>
+  </div>
+  <div class="collections-more reveal">
+    <a href="projects.html">View All Projects <span class="arrow">&rarr;</span></a>
+  </div>
+</section>
+
+<!-- ═══ THE CRAFT (Horizontal Scroll) ═══ -->
+<section class="craft" id="craft">
+  <div class="craft-header">
+    <div class="section-line reveal" style="margin:0 auto 20px"></div>
+    <h2 class="section-title reveal">The Art of Purezza</h2>
+  </div>
+  <div class="craft-track-wrapper" id="craftWrapper">
+    <div class="craft-track" id="craftTrack">
+      <div class="craft-panel">
+        <div class="craft-panel-number">01</div>
+        <div class="craft-panel-body">
+          <h3 class="craft-panel-title">Source</h3>
+          <p class="craft-panel-desc">Hand-selected from sustainably managed forests across the tropics. Every species chosen for its unique character, density, and grain narrative. We trace each plank to its origin.</p>
+        </div>
+        <div class="craft-panel-img"><img src="assets/pergolas/Purezza_Pergolas_madera_1.webp" alt="Sourcing premium wood"></div>
+      </div>
+      <div class="craft-panel">
+        <div class="craft-panel-number">02</div>
+        <div class="craft-panel-body">
+          <h3 class="craft-panel-title">Mill</h3>
+          <p class="craft-panel-desc">Precision-cut with techniques refined over decades. Each board is milled to exact specifications, respecting the natural movement and grain direction of the timber.</p>
+        </div>
+        <div class="craft-panel-img"><img src="assets/pisos/Purezza_pisos_madera_med2.jpg" alt="Precision milling process"></div>
+      </div>
+      <div class="craft-panel">
+        <div class="craft-panel-number">03</div>
+        <div class="craft-panel-body">
+          <h3 class="craft-panel-title">Finish</h3>
+          <p class="craft-panel-desc">A twelve-layer finishing process creates unmatched depth and durability. Hand-applied oils and lacquers reveal the full complexity of the grain, protecting it for generations.</p>
+        </div>
+        <div class="craft-panel-img"><img src="assets/spc/osaka/osaka-2.webp" alt="Finishing process"></div>
+      </div>
+      <div class="craft-panel">
+        <div class="craft-panel-number">04</div>
+        <div class="craft-panel-body">
+          <h3 class="craft-panel-title">Install</h3>
+          <p class="craft-panel-desc">White-glove installation by our master craftsmen. Every joint, every transition, every threshold — executed with the precision of fine cabinetry. We don't leave until it's perfect.</p>
+        </div>
+        <div class="craft-panel-img"><img src="assets/deck-cumaru/deck-cumaru-3.jpg" alt="Expert installation"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TEXT REVEAL (Karaoke) ═══ -->
+<section class="text-reveal" id="about">
+  <div class="text-reveal-content" id="textReveal">
+    <span class="text-reveal-line">Purezza was born from a single conviction:</span>
+    <span class="text-reveal-line">the surfaces beneath our feet shape how we experience a space.</span>
+    <span class="text-reveal-line">We source only from sustainably cultivated forests,</span>
+    <span class="text-reveal-line">working with Algarrobo, Sapan, Choiba, Roble, Teca and Pino —</span>
+    <span class="text-reveal-line">species that carry centuries of character in every grain.</span>
+    <span class="text-reveal-line">For every 15 square meters installed, we plant a native tree in Colombia.</span>
+    <span class="text-reveal-line">This is not a brand. This is a promise to the ground we walk on.</span>
+  </div>
+</section>
+
+<!-- ═══ FEATURED PROJECT ═══ -->
+<section class="project" id="projects">
+  <div class="project-hero" id="projectHero">
+    <img class="project-hero-img" id="projectImg" src="assets/pergolas/Purezza_Pergolas_madera_17.webp" alt="Villa Sereno project by Purezza">
+    <div class="project-hero-overlay">
+      <p class="project-hero-label reveal">Featured Project</p>
+      <h3 class="project-hero-name reveal">Residencia El Poblado</h3>
+      <p class="project-hero-specs reveal">Cumaru Pergola &amp; Deck | 180 m&sup2; | Private Residence, Medellin</p>
+      <a href="projects.html#residencia-el-poblado" class="project-cta reveal"><span>View Project</span></a>
+    </div>
+  </div>
+  <div class="project-thumbs">
+    <div class="project-thumb reveal">
+      <img src="assets/escaleras/escaleras-hdr1.webp" alt="Staircase project">
+    </div>
+    <div class="project-thumb reveal">
+      <img src="assets/cielos/roble/roble-0003.jpg" alt="Ceiling installation">
+    </div>
+    <div class="project-thumb reveal">
+      <img src="assets/deck-cumaru/deck-cumaru-3.jpg" alt="Deck project">
+    </div>
+  </div>
+  <div class="project-more reveal">
+    <a href="projects.html">View All Projects <span class="arrow">&rarr;</span></a>
+  </div>
+</section>
+
+<!-- ═══ WHY PUREZZA (Stats) ═══ -->
+<section class="stats section-pad" id="stats">
+  <div class="stats-bg"><img src="assets/pisos/Purezza_pisos_en_madera4.jpg" alt=""></div>
+  <div class="stats-content">
+    <div class="stats-grid">
+      <div class="stat reveal">
+        <div class="stat-number"><span class="counter" data-target="6">0</span></div>
+        <div class="stat-label">Wood Species</div>
+      </div>
+      <div class="stat reveal">
+        <div class="stat-number"><span class="counter" data-target="3">0</span></div>
+        <div class="stat-label">Showrooms in Colombia</div>
+      </div>
+      <div class="stat reveal">
+        <div class="stat-number"><span class="counter" data-target="15">0</span></div>
+        <div class="stat-label">m&sup2; = One Native Tree Planted</div>
+      </div>
+      <div class="stat reveal">
+        <div class="stat-number"><span class="counter" data-target="100">0</span>%</div>
+        <div class="stat-label">Sustainably Sourced</div>
+      </div>
+    </div>
+    <div class="stats-testimonial reveal">
+      <p class="stats-quote">&ldquo;Purezza transformed our vision into a living masterpiece. The craftsmanship is unlike anything we&rsquo;ve ever seen.&rdquo;</p>
+      <p class="stats-author">&mdash; Alejandro Restrepo, Medellin</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MATERIAL CLOSE-UP ═══ -->
+<section class="material section-pad" id="material">
+  <div class="material-inner">
+    <div class="material-img-wrap" id="materialImg">
+      <img src="assets/pisos/Purezza_pisos_en_madera2.jpg" alt="Close-up of premium wood grain">
+      <div class="material-spotlight" id="materialSpotlight"></div>
+    </div>
+    <div class="material-text">
+      <div class="section-label reveal">Crafted for Touch</div>
+      <h2 class="material-statement reveal">Feel the difference. Every grain. Every tone. Every detail&thinsp;&mdash;&thinsp;considered.</h2>
+      <p class="material-body reveal">Run your hand across a Purezza surface and you understand immediately. This is wood that has been understood, not merely processed. The depth of finish reveals layers of character that photography cannot capture. This is something you must experience.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CONTACT ═══ -->
+<section class="contact section-pad" id="contact">
+  <div class="contact-inner">
+    <div class="section-line reveal" style="margin:0 auto 20px"></div>
+    <h2 class="contact-title reveal">Begin Your Journey</h2>
+    <p class="contact-sub reveal">Schedule a private consultation with our design team.</p>
+    <form class="form" id="contactForm" onsubmit="return false">
+      <div class="form-group reveal">
+        <label class="form-label" for="name">Name</label>
+        <input class="form-input" type="text" id="name" placeholder="Your full name" required>
+      </div>
+      <div class="form-group reveal">
+        <label class="form-label" for="email">Email</label>
+        <input class="form-input" type="email" id="email" placeholder="you@email.com" required>
+      </div>
+      <div class="form-group reveal">
+        <label class="form-label" for="phone">Phone / WhatsApp</label>
+        <input class="form-input" type="tel" id="phone" placeholder="+57 ___  ___  ____">
+      </div>
+      <div class="form-group reveal">
+        <label class="form-label" for="projectType">Project Type</label>
+        <select class="form-select" id="projectType">
+          <option value="">Select project type</option>
+          <option>Pisos — Structured Flooring</option>
+          <option>Pisos — Laminated</option>
+          <option>Pisos — SPC</option>
+          <option>Enchapes &amp; Cielos</option>
+          <option>Pergolas</option>
+          <option>Decks</option>
+          <option>Escaleras</option>
+          <option>Full Residential</option>
+          <option>Commercial Project</option>
+        </select>
+      </div>
+      <div class="form-group full reveal">
+        <label class="form-label" for="message">Message</label>
+        <textarea class="form-textarea" id="message" rows="4" placeholder="Tell us about your project..."></textarea>
+      </div>
+      <div class="form-submit reveal">
+        <button type="submit" class="form-btn"><span>Send Inquiry</span></button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="footer-top">
+    <a href="#" class="footer-logo">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 224.89 41.14">
+        <path d="M16.24,23.46H4.1v14.01H.46V2.73h15.78c5.58,0,10.16,4.01,10.16,10.36s-4.38,10.37-10.16,10.37m.06-17.3H4.1v13.86h12.2c3.49,0,6.25-2.87,6.25-6.93s-2.86-6.93-6.25-6.93"/>
+        <path d="M45.94,38.1c-8.03,0-13.85-5.36-13.85-13.54V2.73h3.65V24.55c0,5.99,4.28,10.05,10.21,10.05s10.26-4.07,10.26-10.05V2.73h3.7V24.55c0,8.18-5.99,13.54-13.96,13.54"/>
+        <path d="M90.17,37.47l-8.07-14.74h-10.37v14.74h-3.65V2.73h15.05c5.52,0,10.11,3.7,10.11,10,0,4.64-2.61,8.02-7.25,9.48l8.44,15.26h-4.28Zm-6.98-31.31h-11.46v13.13h11.46c3.49,0,6.2-2.66,6.2-6.57s-2.87-6.56-6.2-6.56"/>
+        <polygon points="100.54 37.47 100.54 2.73 124.97 2.73 124.97 6.16 104.24 6.16 104.24 17.36 121.85 17.36 121.85 20.75 104.24 20.75 104.24 34.03 124.97 34.03 124.97 37.47 100.54 37.47"/>
+        <polygon points="129.92 37.47 129.92 34.03 151.07 6.16 130.76 6.16 130.76 2.73 155.65 2.73 155.65 6.16 134.51 34.03 156.07 34.03 156.07 37.47 129.92 37.47"/>
+        <polygon points="160.66 37.47 160.66 34.03 181.81 6.16 161.49 6.16 161.49 2.73 186.39 2.73 186.39 6.16 165.24 34.03 186.81 34.03 186.81 37.47 160.66 37.47"/>
+        <polygon points="209.47 2.73 204.47 2.73 190.14 37.47 193.79 37.47 198.11 27 199.53 23.56 199.52 23.56 206.91 5.59 215.56 27 219.89 37.47 223.79 37.47 209.47 2.73"/>
+      </svg>
+    </a>
+    <div class="footer-nav">
+      <a href="#craft">Craftsmanship</a>
+      <a href="projects.html">Projects</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="footer-social">
+      <a href="https://instagram.com/somospurezza" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      </a>
+      <a href="https://wa.me/573054101979" target="_blank" rel="noopener" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      </a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">&copy; 2026 Purezza. All rights reserved.</p>
+    <p class="footer-tagline">Designed with obsession.</p>
+  </div>
+</footer>
+
+<!-- ═══ SCRIPTS ═══ -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+/* ══════════════════════════════════════════════
+   INITIALIZATION
+══════════════════════════════════════════════ */
+gsap.registerPlugin(ScrollTrigger);
+
+// Smooth scroll
+const lenis = new Lenis({ duration: 1.2, easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smoothWheel: true });
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(time => lenis.raf(time * 1000));
+gsap.ticker.lagSmoothing(0);
+// Pause scroll during loader
+lenis.stop();
+
+/* ══════════════════════════════════════════════
+   CUSTOM CURSOR
+══════════════════════════════════════════════ */
+const cursor = document.getElementById('cursor');
+let mx = -100, my = -100, cx = -100, cy = -100;
+
+if (window.matchMedia('(pointer:fine)').matches) {
+  document.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; cursor.classList.remove('hidden'); });
+  document.addEventListener('mouseleave', () => cursor.classList.add('hidden'));
+
+  (function moveCursor() {
+    cx += (mx - cx) * 0.15;
+    cy += (my - cy) * 0.15;
+    cursor.style.left = cx + 'px';
+    cursor.style.top = cy + 'px';
+    requestAnimationFrame(moveCursor);
+  })();
+
+  document.querySelectorAll('a,button,[data-hover],.collection-card,.project-thumb').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('active'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('active'));
+  });
+}
+
+/* ══════════════════════════════════════════════
+   PAGE LOADER
+══════════════════════════════════════════════ */
+window.addEventListener('load', () => {
+  const tl = gsap.timeline({
+    onComplete: () => {
+      document.getElementById('loader').style.display = 'none';
+      document.getElementById('loaderCurtain').style.display = 'none';
+      document.body.style.overflow = '';
+      lenis.start();
+      initScrollAnimations();
+    }
+  });
+
+  tl.to('.loader-logo', { opacity: 1, duration: 1.2, ease: 'power2.out' })
+    .to('.loader-logo', { scale: 0.4, duration: 0.8, ease: 'power3.inOut' }, '+=0.6')
+    .to('.loader', { opacity: 0, duration: 0.5, ease: 'power2.in' }, '-=0.3')
+    .to('#loaderCurtain', { scaleY: 0, duration: 0.8, ease: 'power4.inOut' }, '-=0.3')
+    .to('#navLogo', { opacity: 1, duration: 0.6, ease: 'power2.out' }, '-=0.4')
+    .to('.hero-label', { opacity: 1, duration: 0.6, ease: 'power2.out' }, '-=0.3')
+    .to('.hero-title .word', { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: 'power3.out' }, '-=0.3')
+    .to('.hero-sub', { opacity: 1, duration: 0.7, ease: 'power2.out' }, '-=0.2')
+    .to('#heroLine', { height: 60, duration: 0.8, ease: 'power2.out' }, '-=0.4')
+    .to('.hero-scroll', { opacity: 1, duration: 0.6, ease: 'power2.out' }, '-=0.3');
+});
+
+/* ══════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════ */
+const nav = document.getElementById('nav');
+ScrollTrigger.create({
+  start: 'top -80',
+  onUpdate: self => nav.classList.toggle('scrolled', self.progress > 0 || window.scrollY > 80)
+});
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 80));
+
+// Hamburger
+const hamburger = document.getElementById('hamburger');
+const mobileMenu = document.getElementById('mobileMenu');
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  mobileMenu.classList.toggle('open');
+  if (mobileMenu.classList.contains('open')) lenis.stop(); else lenis.start();
+});
+mobileMenu.querySelectorAll('a').forEach(a => {
+  a.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    mobileMenu.classList.remove('open');
+    lenis.start();
+  });
+});
+
+/* ══════════════════════════════════════════════
+   SCROLL ANIMATIONS
+══════════════════════════════════════════════ */
+function initScrollAnimations() {
+
+  // ── General reveals ──
+  gsap.utils.toArray('.reveal').forEach((el, i) => {
+    gsap.to(el, {
+      scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' },
+      opacity: 1, y: 0, duration: 0.8, delay: (i % 4) * 0.1, ease: 'power3.out'
+    });
+  });
+
+  // ── Brand Statement (Pinned Scroll) ──
+  const slides = gsap.utils.toArray('.brand-slide');
+  const progressBar = document.getElementById('brandProgress');
+
+  ScrollTrigger.create({
+    trigger: '#brand',
+    start: 'top top',
+    end: '+=300%',
+    pin: '#brandPin',
+    scrub: 0.5,
+    onUpdate: self => {
+      const p = self.progress;
+      progressBar.style.width = (p * 100) + '%';
+      const idx = Math.min(Math.floor(p * 3), 2);
+      slides.forEach((s, i) => {
+        gsap.to(s, { opacity: i === idx ? 1 : 0, duration: 0.4, overwrite: true });
+      });
+    }
+  });
+
+  // ── Collections stagger ──
+  gsap.utils.toArray('.collection-card').forEach((card, i) => {
+    gsap.fromTo(card,
+      { opacity: 0, y: 60 },
+      { scrollTrigger: { trigger: card, start: 'top 90%' }, opacity: 1, y: 0, duration: 0.8, delay: i * 0.15, ease: 'power3.out' }
+    );
+  });
+
+  // ── Horizontal Scroll (The Craft) ──
+  const craftTrack = document.getElementById('craftTrack');
+  const craftWrapper = document.getElementById('craftWrapper');
+  gsap.to(craftTrack, {
+    xPercent: -75,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: craftWrapper,
+      start: 'top top',
+      end: () => '+=' + (craftTrack.scrollWidth - window.innerWidth),
+      pin: true,
+      scrub: 1,
+      invalidateOnRefresh: true
+    }
+  });
+
+  // ── Craft panel reveals ──
+  gsap.utils.toArray('.craft-panel').forEach(panel => {
+    gsap.from(panel.querySelector('.craft-panel-number'), {
+      scrollTrigger: { trigger: panel, start: 'left 80%', scroller: undefined, containerAnimation: undefined },
+      opacity: 0, x: -40, duration: 0.8
+    });
+  });
+
+  // ── Text Reveal (Karaoke) ──
+  const lines = gsap.utils.toArray('.text-reveal-line');
+  lines.forEach((line, i) => {
+    ScrollTrigger.create({
+      trigger: line,
+      start: 'top 75%',
+      end: 'top 35%',
+      scrub: true,
+      onUpdate: self => {
+        if (self.progress > 0.3) line.classList.add('active');
+        else line.classList.remove('active');
+      }
+    });
+  });
+
+  // ── Featured Project image scale ──
+  gsap.to('#projectImg', {
+    scrollTrigger: { trigger: '#projectHero', start: 'top 80%', end: 'top 10%', scrub: 1 },
+    scale: 1, filter: 'brightness(0.85)', ease: 'none'
+  });
+
+  // ── Stats counter ──
+  const counters = document.querySelectorAll('.counter');
+  counters.forEach(counter => {
+    const target = +counter.dataset.target;
+    ScrollTrigger.create({
+      trigger: counter,
+      start: 'top 85%',
+      once: true,
+      onEnter: () => {
+        gsap.to({ val: 0 }, {
+          val: target,
+          duration: 2,
+          ease: 'power2.out',
+          onUpdate: function() { counter.textContent = Math.round(this.targets()[0].val).toLocaleString(); }
+        });
+      }
+    });
+  });
+
+  // ── Image scale on scroll (project thumbs) ──
+  gsap.utils.toArray('.project-thumb img').forEach(img => {
+    gsap.fromTo(img,
+      { scale: 0.92, filter: 'blur(2px)' },
+      { scrollTrigger: { trigger: img, start: 'top 85%', end: 'top 40%', scrub: 1 }, scale: 1, filter: 'blur(0px)', ease: 'none' }
+    );
+  });
+}
+
+/* ══════════════════════════════════════════════
+   MATERIAL SPOTLIGHT
+══════════════════════════════════════════════ */
+const materialWrap = document.getElementById('materialImg');
+const spotlight = document.getElementById('materialSpotlight');
+
+if (materialWrap && spotlight && window.matchMedia('(pointer:fine)').matches) {
+  materialWrap.addEventListener('mousemove', e => {
+    const rect = materialWrap.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    spotlight.style.background = `radial-gradient(circle 220px at ${x}px ${y}px, transparent 0%, rgba(10,10,10,0.6) 100%)`;
+  });
+  materialWrap.addEventListener('mouseleave', () => {
+    spotlight.style.background = 'radial-gradient(circle 200px at 50% 50%, transparent 0%, rgba(10,10,10,0.65) 100%)';
+  });
+}
+
+/* ══════════════════════════════════════════════
+   SMOOTH ANCHOR SCROLLING
+══════════════════════════════════════════════ */
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) { e.preventDefault(); lenis.scrollTo(target, { offset: -80 }); }
+  });
+});
+</script>
+</body>
+</html>
