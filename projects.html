@@ -158,7 +158,7 @@ ul{list-style:none}
 .detail-meta-val{font-size:.85rem;color:var(--text);font-weight:300;text-align:right}
 .detail-meta-desc{font-size:.92rem;font-weight:300;color:var(--text2);line-height:1.8}
 .detail-gallery{display:flex;flex-direction:column;gap:20px}
-.detail-gallery-img{width:100%;border-radius:2px;opacity:0;transform:translateY(20px) scale(0.98);transition:opacity .6s var(--ease),transform .6s var(--ease)}
+.detail-gallery-img{width:100%;border-radius:2px;opacity:0;transform:translateY(20px) scale(0.98);transition:opacity .6s var(--ease),transform .6s var(--ease);aspect-ratio:4/3;object-fit:cover;background:var(--bg2)}
 .detail-gallery-img.visible{opacity:1;transform:translateY(0) scale(1)}
 
 /* SCROLL HINT (mobile only) */
@@ -1213,7 +1213,7 @@ function populateDetail(project) {
   galleryEl.appendChild(galleryLabel);
 
   project.gallery.forEach(function(src, i) {
-    var img = createImg(src, project.name + ' - Image ' + (i + 1), 'detail-gallery-img', 'lazy');
+    var img = createImg(src, project.name + ' - Image ' + (i + 1), 'detail-gallery-img', 'eager');
     img.addEventListener('click', function() { openLightbox(project.gallery, i); });
     galleryEl.appendChild(img);
   });
