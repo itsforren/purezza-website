@@ -1259,6 +1259,25 @@ function populateDetail(project) {
 }
 
 var pendingNextProject = null;
+var isTransitioning = false;
+var nextProjectObserver = null;
+
+function setupNextProjectObserver(el) {
+  if (nextProjectObserver) nextProjectObserver.disconnect();
+  var isMobile = window.innerWidth <= 768;
+  var scrollRoot = isMobile ? overlayEl : detailScrollEl;
+
+  nextProjectObserver = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting && pendingNextProject && !isTransitioning) {
+        nextProjectObserver.disconnect();
+        transitionToProject(pendingNextProject);
+      }
+    });
+  }, { threshold: 0.6, root: isMobile ? null : scrollRoot });
+
+  nextProjectObserver.observe(el);
+}
 
 function buildNextProjectSection(currentProject) {
   var nextProjectEl = document.getElementById('nextProject');
@@ -1272,7 +1291,7 @@ function buildNextProjectSection(currentProject) {
   pendingNextProject = next;
   freshEl.style.display = '';
 
-  var label = createEl('p', 'next-project-label', 'Next Project');
+  var label = createEl('p', 'next-project-label', 'Up Next');
   freshEl.appendChild(label);
 
   var name = createEl('h3', 'next-project-name', next.name);
@@ -1299,11 +1318,18 @@ function buildNextProjectSection(currentProject) {
   freshEl.appendChild(arrow);
 
   freshEl.addEventListener('click', function() {
-    if (pendingNextProject) transitionToProject(pendingNextProject);
+    if (pendingNextProject && !isTransitioning) transitionToProject(pendingNextProject);
   });
+
+  /* Auto-trigger when scrolled into view (infinite scroll) */
+  setupNextProjectObserver(freshEl);
 }
 
 function transitionToProject(nextProj) {
+  if (isTransitioning) return;
+  isTransitioning = true;
+  if (nextProjectObserver) nextProjectObserver.disconnect();
+
   var scrollContainer = detailScrollEl;
   var detailBody = scrollContainer.querySelector('.detail-body');
   var heroImg = document.getElementById('detailHeroImg');
@@ -1333,6 +1359,7 @@ function transitionToProject(nextProj) {
       if (npEl) gsap.fromTo(npEl, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.4, delay: 0.3, ease: 'power2.out' });
 
       setTimeout(observeGalleryImages, 100);
+      setTimeout(function() { isTransitioning = false; }, 700);
 
       /* Re-show scroll hint on mobile */
       var scrollHintEl = document.getElementById('scrollHint');
