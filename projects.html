@@ -138,7 +138,7 @@ ul{list-style:none}
 /* ══════════════════════════════════════════════
    PROJECT DETAIL OVERLAY
 ══════════════════════════════════════════════ */
-.detail-overlay{position:fixed;inset:0;z-index:2000;pointer-events:none;opacity:0;overflow:hidden}
+.detail-overlay{position:fixed;inset:0;z-index:2000;pointer-events:none;opacity:0}
 .detail-overlay.open{pointer-events:all;opacity:1}
 .detail-backdrop{position:fixed;inset:0;background:rgba(10,10,10,0);transition:background .6s var(--ease-flip);pointer-events:none;z-index:2000}
 .detail-overlay.open .detail-backdrop{background:rgba(10,10,10,0.95)}
@@ -1180,23 +1180,21 @@ var flipGhost = null;
 var scrollLockPos = 0;
 
 /* ══════════════════════════════════════════════
-   BODY SCROLL LOCK (iOS-safe touchmove approach)
+   STOP LENIS FROM STEALING SCROLL EVENTS
+   Lenis calls preventDefault on wheel/touch even when stopped.
+   stopPropagation prevents events from reaching Lenis on window.
 ══════════════════════════════════════════════ */
-function preventBodyTouch(e) {
-  /* Allow scroll inside the detail overlay (the scroll container on mobile) */
-  if (overlayEl && overlayEl.contains(e.target)) return;
-  /* Allow scroll inside lightbox */
-  var lb = document.getElementById('lightbox');
-  if (lb && lb.contains(e.target)) return;
-  e.preventDefault();
-}
+function stopProp(e) { e.stopPropagation(); }
+overlayEl.addEventListener('wheel', stopProp, { passive: true });
+overlayEl.addEventListener('touchmove', stopProp, { passive: true });
+overlayEl.addEventListener('touchstart', stopProp, { passive: true });
+detailScrollEl.addEventListener('wheel', stopProp, { passive: true });
+detailScrollEl.addEventListener('touchmove', stopProp, { passive: true });
+detailScrollEl.addEventListener('touchstart', stopProp, { passive: true });
 
 function lockBodyScroll() {
   scrollLockPos = window.scrollY;
   lenis.stop();
-  /* Touchmove prevention — blocks body scroll, allows overlay scroll */
-  document.addEventListener('touchmove', preventBodyTouch, { passive: false });
-  /* Desktop: position fixed prevents wheel scroll */
   document.body.style.position = 'fixed';
   document.body.style.top = '-' + scrollLockPos + 'px';
   document.body.style.left = '0';
@@ -1206,7 +1204,6 @@ function lockBodyScroll() {
 
 function unlockBodyScroll() {
   lenis.start();
-  document.removeEventListener('touchmove', preventBodyTouch);
   document.body.style.position = '';
   document.body.style.top = '';
   document.body.style.left = '';
