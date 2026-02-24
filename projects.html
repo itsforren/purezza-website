@@ -264,14 +264,18 @@ ul{list-style:none}
   .filter-tabs{justify-content:center}
   .filter-count{text-align:center}
   .projects-section{padding:36px 24px 48px}
-  .detail-scroll{transform:none!important;transition:opacity .35s var(--ease)!important}
-  .detail-overlay.open .detail-scroll{opacity:1;transition-delay:.2s!important}
+  /* MOBILE: overlay itself becomes the scroll container */
+  .detail-overlay{overflow-y:auto!important;overflow-x:hidden!important;-webkit-overflow-scrolling:touch!important;overscroll-behavior-y:contain}
+  .detail-overlay.open{background:var(--bg)}
+  .detail-backdrop{display:none!important}
+  .detail-scroll{position:relative!important;height:auto!important;width:100%!important;overflow:visible!important;transform:none!important;opacity:1!important;transition:none!important;z-index:auto!important}
+  .detail-overlay.open .detail-scroll{transform:none!important}
   .detail-hero-img{height:35vh;min-height:200px}
   .detail-body{grid-template-columns:1fr;gap:32px;padding:28px 20px 40px}
   .detail-gallery{gap:16px}
   .detail-gallery-img{opacity:1;transform:none;border-radius:2px}
   .detail-gallery-label{display:block}
-  .detail-close{right:20px;top:12px;z-index:2015;width:40px;height:40px;background:rgba(10,10,10,0.6);border-radius:50%;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+  .detail-close{position:fixed;right:20px;top:12px;z-index:2015;width:40px;height:40px;background:rgba(10,10,10,0.7);border-radius:50%;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
   .detail-scroll-hint{display:flex}
   .next-project{margin-top:32px;padding:40px 20px 60px}
   .next-project-preview{max-width:100%;aspect-ratio:16/10}
@@ -1179,8 +1183,8 @@ var scrollLockPos = 0;
    BODY SCROLL LOCK (iOS-safe touchmove approach)
 ══════════════════════════════════════════════ */
 function preventBodyTouch(e) {
-  /* Allow scroll inside the detail overlay scroll container */
-  if (detailScrollEl && detailScrollEl.contains(e.target)) return;
+  /* Allow scroll inside the detail overlay (the scroll container on mobile) */
+  if (overlayEl && overlayEl.contains(e.target)) return;
   /* Allow scroll inside lightbox */
   var lb = document.getElementById('lightbox');
   if (lb && lb.contains(e.target)) return;
@@ -1320,6 +1324,7 @@ function transitionToProject(nextProj) {
 
       populateDetail(nextProj);
       scrollContainer.scrollTop = 0;
+      overlayEl.scrollTop = 0;
       history.replaceState(null, '', '#' + nextProj.id);
 
       heroImg = document.getElementById('detailHeroImg');
@@ -1336,11 +1341,12 @@ function transitionToProject(nextProj) {
       var scrollHintEl = document.getElementById('scrollHint');
       if (window.innerWidth <= 768 && scrollHintEl) {
         scrollHintEl.classList.remove('hidden');
+        var hintTarget = window.innerWidth <= 768 ? overlayEl : scrollContainer;
         var hideHint = function() {
           scrollHintEl.classList.add('hidden');
-          scrollContainer.removeEventListener('scroll', hideHint);
+          hintTarget.removeEventListener('scroll', hideHint);
         };
-        scrollContainer.addEventListener('scroll', hideHint, { passive: true });
+        hintTarget.addEventListener('scroll', hideHint, { passive: true });
       }
     }
   });
@@ -1378,6 +1384,8 @@ function openDetail(project, card) {
   populateDetail(project);
 
   overlayEl.classList.add('open');
+  /* On mobile, the overlay is the scroll container; on desktop, it's detailScrollEl */
+  overlayEl.scrollTop = 0;
   detailScrollEl.scrollTop = 0;
   lockBodyScroll();
 
@@ -1389,11 +1397,12 @@ function openDetail(project, card) {
   var scrollHintEl = document.getElementById('scrollHint');
   if (window.innerWidth <= 768 && scrollHintEl) {
     scrollHintEl.classList.remove('hidden');
+    var scrollTarget = window.innerWidth <= 768 ? overlayEl : detailScrollEl;
     var hideHint = function() {
       scrollHintEl.classList.add('hidden');
-      detailScrollEl.removeEventListener('scroll', hideHint);
+      scrollTarget.removeEventListener('scroll', hideHint);
     };
-    detailScrollEl.addEventListener('scroll', hideHint, { passive: true });
+    scrollTarget.addEventListener('scroll', hideHint, { passive: true });
   }
 }
 
